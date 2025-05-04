@@ -7,7 +7,10 @@ use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect('dashboard');
+    }
+    return redirect('login');
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
@@ -22,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
     Route::get('galleries', GalleryList::class)->name('galleries.list');
+    Route::get('galleries/{id}', GalleryList::class)->name('galleries.show');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
