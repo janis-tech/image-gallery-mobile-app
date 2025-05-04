@@ -25,20 +25,14 @@ class GalleryList extends Component
         $this->refreshGalleries();
     }
 
-    public function updatedPage()
+    public function updated($attribute, $value)
     {
-        $this->refreshGalleries();
-    }
-
-    public function updatedPerPage()
-    {
-        $this->refreshGalleries();
-    }
-
-    public function updatedSearch()
-    {
-        $this->page = 1;
-        $this->refreshGalleries();
+        if ($attribute == 'search') {
+            $this->page = 1;
+        }
+        if (in_array($attribute, ['page', 'search'])) {
+            $this->refreshGalleries();
+        }
     }
 
     public function refreshGalleries()
@@ -50,9 +44,17 @@ class GalleryList extends Component
         );
     }
 
-    public function deleteGallery($galleryId) {}
+    public function deleteGallery($gallery_id)
+    {
+        $result = $this->imageGalleryHttpService->deleteGallery($gallery_id);
 
-    public function editGallery($galleryId) {}
+        if ($result) {
+            session()->flash('message', 'Gallery deleted successfully!');
+            $this->refreshGalleries();
+        } else {
+            session()->flash('error', 'Failed to delete gallery. Please try again.');
+        }
+    }
 
     public function render()
     {
