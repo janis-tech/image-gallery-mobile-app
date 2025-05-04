@@ -42,4 +42,13 @@ interface ImageGalleryHttpServiceInterface
      * @return bool True if the gallery was deleted successfully, false otherwise.
      */
     public function deleteGallery(string $id): bool;
+
+
+    /**
+     * Fetch images from a specific gallery.
+     * @param string $id The ID of the gallery to fetch images from.
+     * @return array<mixed> An array of images in the gallery.
+     */
+    public function getGalleryImages(string $id): array;
+
 }

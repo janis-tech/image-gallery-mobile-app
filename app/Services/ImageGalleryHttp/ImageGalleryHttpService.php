@@ -150,4 +150,18 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             throw new \Exception('Error deleting gallery: ' . $e->getMessage());
         }
     }
+
+
+    public function getGalleryImages(string $id): array
+    {
+        try {
+            $response = $this->client->request('GET', 'galleries/' . $id . '/images');
+            
+            $data = json_decode($response->getBody()->getContents(), true);
+            return $data['data'] ?? [];
+            
+        } catch (GuzzleException $e) {
+            throw new \Exception('Error fetching gallery images: ' . $e->getMessage());
+        }
+    }
 }
