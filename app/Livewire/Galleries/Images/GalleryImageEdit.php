@@ -45,17 +45,16 @@ class GalleryImageEdit extends Component
             if (! $this->image) {
                 session()->flash('error', 'Image not found.');
 
-                return redirect()->route('galleries.show', $this->gallery_id);
+                $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
             }
 
             $this->title = $this->image['title'] ?? '';
             $this->alt_text = $this->image['alt_text'] ?? '';
             $this->description = $this->image['description'] ?? '';
-
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load image. Please try again later.');
 
-            return redirect()->route('galleries.show', $this->gallery_id);
+            $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
         }
     }
 
@@ -75,10 +74,10 @@ class GalleryImageEdit extends Component
             if ($result['success']) {
                 session()->flash('message', 'Image updated successfully!');
 
-                return redirect()->route('galleries.image.show', [
+                $this->redirect(route('galleries.image.show', [
                     'gallery_id' => $this->gallery_id,
                     'id' => $this->image['id'],
-                ]);
+                ]), navigate: true);
             }
 
             if (isset($result['errors']) && ! empty($result['errors'])) {
@@ -93,10 +92,10 @@ class GalleryImageEdit extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return redirect()->route('galleries.image.show', [
+            $this->redirect(route('galleries.image.show', [
                 'gallery_id' => $this->gallery_id,
                 'id' => $this->image['id'],
-            ]);
+            ]), navigate: true);
         }
     }
 

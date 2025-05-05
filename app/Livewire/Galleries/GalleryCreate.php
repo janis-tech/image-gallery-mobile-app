@@ -35,7 +35,7 @@ class GalleryCreate extends Component
             if ($result['success']) {
                 session()->flash('message', 'Gallery created successfully!');
 
-                return redirect()->route('galleries.list');
+                return $this->redirect(route('galleries.list'), navigate: true);
             }
 
             if (isset($result['errors']) && ! empty($result['errors'])) {
@@ -50,7 +50,7 @@ class GalleryCreate extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return redirect()->route('galleries.list');
+            return $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 

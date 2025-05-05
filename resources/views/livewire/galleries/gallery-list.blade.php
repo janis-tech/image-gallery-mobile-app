@@ -91,7 +91,7 @@
                 </svg>
                 <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">No galleries found</h3>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating your first gallery.</p>
-                <a href="{{ route('galleries.create') }}"
+                <a href="{{ route('galleries.create') }}" wire:navigate
                     class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Create New Gallery
                 </a>
@@ -106,7 +106,7 @@
             :key="'gallery-list-pagination-'.$currentPage" />
     </div>
     
-    <a href="{{ route('galleries.create') }}"
+    <a href="{{ route('galleries.create') }}" wire:navigate
         class="fixed bottom-8 right-8 flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-300 z-[9999]"
         aria-label="Create Gallery" style="position: fixed; bottom: 2rem; right: 2rem;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">

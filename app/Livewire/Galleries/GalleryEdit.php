@@ -40,7 +40,7 @@ class GalleryEdit extends Component
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
-                return redirect()->route('galleries.list');
+                return $this->redirect(route('galleries.list'), navigate: true);
             }
 
             $this->name = $this->gallery['name'];
@@ -48,7 +48,7 @@ class GalleryEdit extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 
-            return redirect()->route('galleries.list');
+            return $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
@@ -70,7 +70,7 @@ class GalleryEdit extends Component
             if ($result['success']) {
                 session()->flash('message', 'Gallery updated successfully!');
 
-                return redirect()->route('galleries.list');
+                return $this->redirect(route('galleries.list'), navigate: true);
             }
 
             if (isset($result['errors']) && ! empty($result['errors'])) {
@@ -85,7 +85,7 @@ class GalleryEdit extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return redirect()->route('galleries.list');
+            return $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 

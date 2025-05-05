@@ -11,7 +11,7 @@
                 @endif
                 
                 @if(isset($item['url']) && $index !== count($items) - 1)
-                    <a href="{{ $item['url'] }}" class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors font-medium">
+                    <a href="{{ $item['url'] }}" wire:navigate class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors font-medium">
                         {{ $item['label'] }}
                     </a>
                 @else
