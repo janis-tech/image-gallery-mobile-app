@@ -151,11 +151,18 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         }
     }
 
-
-    public function getGalleryImages(string $id): array
+    public function getGalleryImages(string $id, ?string $search = null): array
     {
         try {
-            $response = $this->client->request('GET', 'galleries/' . $id . '/images');
+            $query_params = [];
+            
+             if ($search) {
+                $query_params['vector_search'] = $search;
+            }
+            
+            $response = $this->client->request('GET', 'galleries/' . $id . '/images', [
+                'query' => $query_params
+            ]);
             
             $data = json_decode($response->getBody()->getContents(), true);
             return $data['data'] ?? [];

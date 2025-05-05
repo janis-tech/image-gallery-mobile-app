@@ -47,9 +47,10 @@ interface ImageGalleryHttpServiceInterface
     /**
      * Fetch images from a specific gallery.
      * @param string $id The ID of the gallery to fetch images from.
+     * @param ?string $search The search term to filter images.
      * @return array<mixed> An array of images in the gallery.
      */
-    public function getGalleryImages(string $id): array;
+    public function getGalleryImages(string $id, ?string $search): array;
 
     /**
      * Fetch a specific image from a gallery.
