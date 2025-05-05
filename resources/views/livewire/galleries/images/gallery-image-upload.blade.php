@@ -23,9 +23,9 @@
             <!-- Image Upload Area -->
             <div class="mb-5">
                 <div class="relative border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-900 transition-all duration-200 aspect-square">
-                    @if($image)
+                    @if(!empty($image_data_url))
                         <div class="relative w-full h-full">
-                            <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="w-full h-full object-contain rounded">
+                            <img src="{{ $image_data_url }}" alt="Preview" class="w-full h-full object-contain rounded">
                             <button 
                                 type="button"
                                 wire:click="removeImage"
@@ -146,7 +146,7 @@
                         class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                         wire:loading.attr="disabled"
                         wire:loading.class="opacity-75 cursor-wait"
-                        @if(!$image) disabled @endif
+                        @if(empty($image_data_url)) disabled @endif
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" wire:loading.remove wire:target="uploadImage">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
