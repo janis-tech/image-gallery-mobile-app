@@ -214,4 +214,45 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             throw new \Exception('Error fetching image: ' . $e->getMessage());
         }
     }
+    
+    public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array
+    {
+        try {
+            $response = $this->client->request('PUT', 'galleries/' . $gallery_id . '/images/' . $image_id, [
+                'json' => [
+                    'title' => $title,
+                    'alt_text' => $alt_text,
+                    'description' => $description,
+                ],
+            ]);
+            
+            return [
+                'success' => true
+            ];
+            
+        } catch (RequestException $e) {
+            if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
+                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+                
+                return [
+                    'success' => false,
+                    'errors' => $responseBody['errors'] ?? [],
+                    'message' => $responseBody['message'] ?? 'Validation failed'
+                ];
+            }
+            
+            Log::error('Error updating gallery image', [
+                'gallery_id' => $gallery_id,
+                'image_id' => $image_id,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to connect to the server'
+            ];
+        }
+    }
 }

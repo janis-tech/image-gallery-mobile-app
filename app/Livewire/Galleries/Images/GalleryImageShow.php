@@ -13,6 +13,7 @@ class GalleryImageShow extends Component
     public $current_gallery_index = 0;
     public $gallery_images = [];
     public $current_url_copied = false;
+    public array $gallery = [];
 
     private ImageGalleryHttpServiceInterface $image_gallery_http_service;
 
@@ -24,6 +25,7 @@ class GalleryImageShow extends Component
     public function mount($gallery_id, $id)
     {
         $this->image = $this->image_gallery_http_service->getGalleryImage($gallery_id, $id);
+        $this->gallery = $this->image_gallery_http_service->getGallery($gallery_id);
     }
 
     #[On('show-image')]

@@ -62,4 +62,14 @@ interface ImageGalleryHttpServiceInterface
      */
     public function getGalleryImage(string $gallery_id, string $image_id): array;
 
+    /**
+     * Update a gallery image.
+     * @param string $gallery_id The ID of the gallery containing the image.
+     * @param string $image_id The ID of the image to update.
+     * @param string $title The new title for the image.
+     * @param string $alt_text The new alt text for the image.
+     * @param string $description The new description for the image.
+     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     */
+    public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array;
 }
