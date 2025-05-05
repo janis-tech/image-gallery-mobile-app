@@ -1,8 +1,8 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Gallery</h1>
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Update your gallery details.</p>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Editing Your Photo Gallery "{{$gallery['name']}}"</h1>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Customize your gallery details.</p>
     </div>
 
     <!-- Gallery edit form -->

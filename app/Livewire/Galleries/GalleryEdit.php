@@ -9,6 +9,7 @@ use Livewire\Attributes\Validate;
 class GalleryEdit extends Component
 {
     public string $gallery_id;
+    public ?array $gallery;
 
     #[Validate('required|string|max:255')]
     public $name = '';
@@ -33,15 +34,15 @@ class GalleryEdit extends Component
     {
 
         try {
-            $gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+            $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
 
-            if (!$gallery) {
+            if (!$this->gallery) {
                 session()->flash('error', 'Gallery not found.');
                 return redirect()->route('galleries.list');
             }
 
-            $this->name = $gallery['name'];
-            $this->description = $gallery['description'] ?? '';
+            $this->name = $this->gallery['name'];
+            $this->description = $this->gallery['description'] ?? '';
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
             return redirect()->route('galleries.list');

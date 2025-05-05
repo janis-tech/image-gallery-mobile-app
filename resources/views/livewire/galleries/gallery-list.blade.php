@@ -1,6 +1,10 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Header with Search -->
     <div class="flex flex-col mb-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Your Photo Galleries</h1>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Browse, search, and manage your personal photo collections.</p>
+        </div>
         <!-- Search Field with Live Updates -->
         <div class="w-full">
             <div class="relative">

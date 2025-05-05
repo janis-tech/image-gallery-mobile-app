@@ -1,6 +1,10 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Header with Search -->
     <div class="flex flex-col mb-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Gallery: {{ $gallery['name'] ?? 'Images' }}</h1>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">View and search your images using semantic meaning.</p>
+        </div>
         <!-- Search Field with Live Updates -->
         <div class="w-full">
             <div class="relative">
@@ -12,7 +16,7 @@
                             clip-rule="evenodd" />
                     </svg>
                 </div>
-                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search images by semantic meaining"
+                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search images by semantic meaning"
                     class="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">
             </div>
         </div>
