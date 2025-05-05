@@ -60,7 +60,9 @@
                 </div>
 
                 <div class="p-4">
-                    <h3 class="font-medium text-lg mb-1 text-gray-800 dark:text-gray-100">{{ $image['title'] ?? 'Unnamed Image' }}</h3>
+                    <h3 class="font-medium text-lg mb-1 text-gray-800 dark:text-gray-100">
+                        {{ $image['title'] ?? str()->words($image['generated_caption'] ?? 'Unnamed Image', 15) }}
+                    </h3>
                     @if(isset($image['description']))
                         <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{{ $image['description'] ?? $image['generated_caption'] }}</p>
                     @endif
