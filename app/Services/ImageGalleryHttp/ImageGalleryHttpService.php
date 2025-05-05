@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Log;
 class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 {
     const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
-    
+
     private Client $client;
-    
+
     public function __construct()
     {
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
-            'timeout'  => 10.0,
+            'timeout' => 10.0,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
@@ -35,11 +35,11 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         try {
             $response = $this->client->request('GET', 'galleries', [
-                'query' => $query_params
+                'query' => $query_params,
             ]);
-            
+
             $responseData = json_decode($response->getBody()->getContents(), true);
-            
+
             return [
                 'data' => $responseData['data'] ?? [],
                 'pagination' => [
@@ -48,28 +48,29 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                     'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
                     'last_page' => $responseData['meta']['last_page'] ?? 1,
                     'from' => $responseData['meta']['from'] ?? 1,
-                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? [])
-                ]
+                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? []),
+                ],
             ];
-            
+
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching galleries: ' . $e->getMessage());
+            throw new \Exception('Error fetching galleries: '.$e->getMessage());
         }
     }
 
     public function getGallery(string $id): ?array
     {
         try {
-            $response = $this->client->request('GET', 'galleries/' . $id);
-            
+            $response = $this->client->request('GET', 'galleries/'.$id);
+
             $data = json_decode($response->getBody()->getContents(), true);
+
             return $data['data'] ?? null;
-            
+
         } catch (GuzzleException $e) {
             if ($e->getCode() === 404) {
                 return null;
             }
-            throw new \Exception('Error fetching gallery: ' . $e->getMessage());
+            throw new \Exception('Error fetching gallery: '.$e->getMessage());
         }
     }
 
@@ -82,31 +83,31 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                     'description' => $description,
                 ],
             ]);
-            
+
             return [
-                'success' => true
+                'success' => true,
             ];
-            
+
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
                 $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
-                
+
                 return [
                     'success' => false,
                     'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed'
+                    'message' => $responseBody['message'] ?? 'Validation failed',
                 ];
             }
-            
+
             Log::error('Error creating gallery', [
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
-                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null
+                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null,
             ]);
-            
+
             return [
                 'success' => false,
-                'message' => 'Failed to connect to the server'
+                'message' => 'Failed to connect to the server',
             ];
         }
     }
@@ -114,38 +115,38 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
     public function updateGallery(string $id, string $name, string $description): array
     {
         try {
-            $response = $this->client->request('PUT', 'galleries/' . $id, [
+            $response = $this->client->request('PUT', 'galleries/'.$id, [
                 'json' => [
                     'name' => $name,
                     'description' => $description,
                 ],
             ]);
-            
+
             return [
-                'success' => true
+                'success' => true,
             ];
-            
+
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
                 $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
-                
+
                 return [
                     'success' => false,
                     'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed'
+                    'message' => $responseBody['message'] ?? 'Validation failed',
                 ];
             }
-            
+
             Log::error('Error updating gallery', [
                 'id' => $id,
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
-                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null
+                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null,
             ]);
-            
+
             return [
                 'success' => false,
-                'message' => 'Failed to connect to the server'
+                'message' => 'Failed to connect to the server',
             ];
         }
     }
@@ -153,12 +154,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
     public function deleteGallery(string $id): bool
     {
         try {
-            $response = $this->client->request('DELETE', 'galleries/' . $id);
-            
+            $response = $this->client->request('DELETE', 'galleries/'.$id);
+
             return $response->getStatusCode() === 204;
-            
+
         } catch (GuzzleException $e) {
-            throw new \Exception('Error deleting gallery: ' . $e->getMessage());
+            throw new \Exception('Error deleting gallery: '.$e->getMessage());
         }
     }
 
@@ -166,25 +167,25 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
     {
         try {
             $query_params = [];
-            
+
             if ($search) {
                 $query_params['vector_search'] = $search;
             }
-            
+
             if ($perPage) {
                 $query_params['per_page'] = $perPage;
             }
-            
+
             if ($page) {
                 $query_params['page'] = $page;
             }
-            
-            $response = $this->client->request('GET', 'galleries/' . $id . '/images', [
-                'query' => $query_params
+
+            $response = $this->client->request('GET', 'galleries/'.$id.'/images', [
+                'query' => $query_params,
             ]);
-            
+
             $responseData = json_decode($response->getBody()->getContents(), true);
-            
+
             return [
                 'data' => $responseData['data'] ?? [],
                 'pagination' => [
@@ -193,65 +194,66 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                     'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
                     'last_page' => $responseData['meta']['last_page'] ?? 1,
                     'from' => $responseData['meta']['from'] ?? 1,
-                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? [])
-                ]
+                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? []),
+                ],
             ];
-            
+
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching gallery images: ' . $e->getMessage());
+            throw new \Exception('Error fetching gallery images: '.$e->getMessage());
         }
     }
 
     public function getGalleryImage(string $gallery_id, string $image_id): array
     {
         try {
-            $response = $this->client->request('GET', 'galleries/' . $gallery_id . '/images/' . $image_id);
-            
+            $response = $this->client->request('GET', 'galleries/'.$gallery_id.'/images/'.$image_id);
+
             $data = json_decode($response->getBody()->getContents(), true);
+
             return $data['data'] ?? [];
-            
+
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching image: ' . $e->getMessage());
+            throw new \Exception('Error fetching image: '.$e->getMessage());
         }
     }
-    
+
     public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array
     {
         try {
-            $response = $this->client->request('PUT', 'galleries/' . $gallery_id . '/images/' . $image_id, [
+            $response = $this->client->request('PUT', 'galleries/'.$gallery_id.'/images/'.$image_id, [
                 'json' => [
                     'title' => $title,
                     'alt_text' => $alt_text,
                     'description' => $description,
                 ],
             ]);
-            
+
             return [
-                'success' => true
+                'success' => true,
             ];
-            
+
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
                 $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
-                
+
                 return [
                     'success' => false,
                     'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed'
+                    'message' => $responseBody['message'] ?? 'Validation failed',
                 ];
             }
-            
+
             Log::error('Error updating gallery image', [
                 'gallery_id' => $gallery_id,
                 'image_id' => $image_id,
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
-                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null
+                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null,
             ]);
-            
+
             return [
                 'success' => false,
-                'message' => 'Failed to connect to the server'
+                'message' => 'Failed to connect to the server',
             ];
         }
     }

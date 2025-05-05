@@ -1,20 +1,21 @@
 <?php
 
-use App\Livewire\Settings\Profile;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Appearance;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Galleries\GalleryCreate;
 use App\Livewire\Galleries\GalleryEdit;
 use App\Livewire\Galleries\GalleryList;
 use App\Livewire\Galleries\GalleryShow;
-use App\Livewire\Galleries\GalleryCreate;
 use App\Livewire\Galleries\Images\GalleryImageEdit;
 use App\Livewire\Galleries\Images\GalleryImageShow;
+use App\Livewire\Settings\Appearance;
+use App\Livewire\Settings\Password;
+use App\Livewire\Settings\Profile;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect('galleries');
     }
+
     return redirect('login');
 })->name('home');
 
@@ -38,4 +39,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('galleries/{gallery_id}/images/{id}/edit', GalleryImageEdit::class)->name('galleries.image.edit');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

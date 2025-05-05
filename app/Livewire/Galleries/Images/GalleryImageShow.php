@@ -2,17 +2,22 @@
 
 namespace App\Livewire\Galleries\Images;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class GalleryImageShow extends Component
 {
     public $image = null;
+
     public $show_gallery_view = false;
+
     public $current_gallery_index = 0;
+
     public $gallery_images = [];
+
     public $current_url_copied = false;
+
     public array $gallery = [];
 
     private ImageGalleryHttpServiceInterface $image_gallery_http_service;
@@ -32,7 +37,7 @@ class GalleryImageShow extends Component
     public function showImage($image_data)
     {
         $this->image = $image_data;
-        
+
         if ($this->image) {
             $this->prepareGalleryImages();
         }
@@ -41,18 +46,18 @@ class GalleryImageShow extends Component
     private function prepareGalleryImages()
     {
         $this->gallery_images = [];
-        
+
         if (isset($this->image['file_url'])) {
             $this->gallery_images[] = [
                 'url' => $this->image['file_url'],
-                'title' => 'Original'
+                'title' => 'Original',
             ];
-            
+
             if (isset($this->image['presets']) && is_array($this->image['presets'])) {
                 foreach ($this->image['presets'] as $preset_name => $preset_url) {
                     $this->gallery_images[] = [
                         'url' => $preset_url,
-                        'title' => ucfirst($preset_name)
+                        'title' => ucfirst($preset_name),
                     ];
                 }
             }
@@ -63,14 +68,14 @@ class GalleryImageShow extends Component
     {
         if (count($this->gallery_images) === 0) {
             $this->prepareGalleryImages();
-            
+
             if (count($this->gallery_images) === 0) {
                 return;
             }
         }
-        
+
         $index = max(0, min($index, count($this->gallery_images) - 1));
-        
+
         $this->current_gallery_index = $index;
         $this->show_gallery_view = true;
         $this->current_url_copied = false;
@@ -86,15 +91,16 @@ class GalleryImageShow extends Component
         $count = count($this->gallery_images);
         if ($count === 0) {
             $this->closeGallery();
+
             return;
         }
-        
+
         if ($direction === 'next') {
             $this->current_gallery_index = ($this->current_gallery_index + 1) % $count;
         } else {
             $this->current_gallery_index = ($this->current_gallery_index - 1 + $count) % $count;
         }
-        
+
         $this->current_url_copied = false;
     }
 

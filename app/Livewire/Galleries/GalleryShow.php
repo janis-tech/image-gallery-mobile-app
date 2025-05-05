@@ -2,20 +2,26 @@
 
 namespace App\Livewire\Galleries;
 
-use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class GalleryShow extends Component
 {
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
     public array $gallery = [];
+
     public array $images = [];
+
     public array $pagination = [];
+
     public string $gallery_id = '';
+
     public string $search = '';
+
     public int $perPage = 12;
+
     public int $currentPage = 1;
 
     protected $queryString = [
@@ -48,7 +54,7 @@ class GalleryShow extends Component
             $this->perPage,
             $this->currentPage
         );
-        
+
         $this->images = $result['data'] ?? [];
         $this->pagination = $result['pagination'] ?? [];
     }
@@ -69,13 +75,14 @@ class GalleryShow extends Component
             $this->refreshImages();
         }
     }
-    
+
     public function resetPage()
     {
         $this->currentPage = 1;
     }
 
-    public function deleteImage($image_id) {
+    public function deleteImage($image_id)
+    {
         // Implementation will be added later
     }
 

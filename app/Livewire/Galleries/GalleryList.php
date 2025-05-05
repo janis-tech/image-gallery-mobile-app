@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Galleries;
 
-use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 class GalleryList extends Component
 {
     public array $galleries = [];
+
     public array $pagination = [];
-    
+
     public int $currentPage = 1;
+
     public int $perPage = 15;
+
     public ?string $search = null;
 
     protected $queryString = [
@@ -50,7 +53,7 @@ class GalleryList extends Component
             $this->refreshGalleries();
         }
     }
-    
+
     public function resetPage()
     {
         $this->currentPage = 1;
@@ -63,7 +66,7 @@ class GalleryList extends Component
             per_page: $this->perPage,
             search: $this->search
         );
-        
+
         $this->galleries = $result['data'] ?? [];
         $this->pagination = $result['pagination'] ?? [];
     }

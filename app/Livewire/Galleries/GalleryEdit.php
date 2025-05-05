@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Galleries;
 
-use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class GalleryEdit extends Component
 {
     public string $gallery_id;
+
     public ?array $gallery;
 
     #[Validate('required|string|max:255')]
@@ -36,8 +37,9 @@ class GalleryEdit extends Component
         try {
             $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
 
-            if (!$this->gallery) {
+            if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
+
                 return redirect()->route('galleries.list');
             }
 
@@ -45,6 +47,7 @@ class GalleryEdit extends Component
             $this->description = $this->gallery['description'] ?? '';
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
+
             return redirect()->route('galleries.list');
         }
     }
@@ -66,12 +69,13 @@ class GalleryEdit extends Component
 
             if ($result['success']) {
                 session()->flash('message', 'Gallery updated successfully!');
+
                 return redirect()->route('galleries.list');
             }
 
-            if (isset($result['errors']) && !empty($result['errors'])) {
+            if (isset($result['errors']) && ! empty($result['errors'])) {
                 foreach ($result['errors'] as $field => $messages) {
-                    foreach ((array)$messages as $message) {
+                    foreach ((array) $messages as $message) {
                         $this->addError($field, $message);
                     }
                 }
@@ -80,6 +84,7 @@ class GalleryEdit extends Component
             }
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
+
             return redirect()->route('galleries.list');
         }
     }

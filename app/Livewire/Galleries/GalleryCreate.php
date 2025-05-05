@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Galleries;
 
-use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class GalleryCreate extends Component
 {
@@ -21,13 +21,12 @@ class GalleryCreate extends Component
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-
     public function createGallery()
     {
         $this->validate();
 
         try {
-            
+
             $result = $this->imageGalleryHttpService->createGallery(
                 name: $this->name,
                 description: $this->description ?? ''
@@ -35,12 +34,13 @@ class GalleryCreate extends Component
 
             if ($result['success']) {
                 session()->flash('message', 'Gallery created successfully!');
+
                 return redirect()->route('galleries.list');
             }
 
-            if (isset($result['errors']) && !empty($result['errors'])) {
+            if (isset($result['errors']) && ! empty($result['errors'])) {
                 foreach ($result['errors'] as $field => $messages) {
-                    foreach ((array)$messages as $message) {
+                    foreach ((array) $messages as $message) {
                         $this->addError($field, $message);
                     }
                 }
@@ -49,6 +49,7 @@ class GalleryCreate extends Component
             }
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
+
             return redirect()->route('galleries.list');
         }
     }
