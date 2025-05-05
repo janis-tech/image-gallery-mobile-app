@@ -11,14 +11,14 @@ use App\Livewire\Galleries\GalleryCreate;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect('dashboard');
+        return redirect('galleries');
     }
     return redirect('login');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('dashboard', function () {
+    return redirect('galleries');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

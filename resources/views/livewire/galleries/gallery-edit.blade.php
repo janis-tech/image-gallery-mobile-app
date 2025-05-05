@@ -8,7 +8,7 @@
     <!-- Gallery edit form -->
     <div class="bg-white dark:bg-[#161615] rounded-lg shadow-md p-6 border border-gray-200 dark:border-[#3E3E3A]">
         <form wire:submit="updateGallery">
-            @include('livewire.partials.gallery-form', ['submitButtonText' => 'Update Gallery'])
+            @include('partials.gallery-form', ['submitButtonText' => 'Update Gallery'])
         </form>
     </div>
 </div>
