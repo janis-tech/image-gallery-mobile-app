@@ -1,4 +1,12 @@
 <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumbs -->
+    <div class="mb-6">
+        <x-ui.breadcrumbs :items="[
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'Galleries'],
+        ]" />
+    </div>
+
     <!-- Header with Search -->
     <div class="flex flex-col mb-6">
         <div class="mb-6">

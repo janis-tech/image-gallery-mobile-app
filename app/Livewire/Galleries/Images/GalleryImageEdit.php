@@ -10,6 +10,7 @@ class GalleryImageEdit extends Component
 {
     public string $gallery_id = '';
     public ?array $image = null;
+    public array $gallery = [];
     
     #[Validate('required|string|max:255')]
     public $title = '';
@@ -25,6 +26,7 @@ class GalleryImageEdit extends Component
     public function boot()
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
+        $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
     }
     
     public function mount($gallery_id, $id)

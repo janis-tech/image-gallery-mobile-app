@@ -1,4 +1,14 @@
 <div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumbs -->
+    <div class="mb-6">
+        <x-ui.breadcrumbs :items="[
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'Galleries', 'url' => route('galleries.list')],
+            ['label' => $gallery['name'] ?? 'Gallery', 'url' => route('galleries.show', $gallery['id'])],
+            ['label' => 'Edit'],
+        ]" />
+    </div>
+    
     <!-- Header -->
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Editing Your Photo Gallery "{{$gallery['name']}}"</h1>

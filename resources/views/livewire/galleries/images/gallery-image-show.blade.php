@@ -1,7 +1,17 @@
-<div class="min-h-screen py-6 px-4">
+<div class="container mx-auto px-4 py-8">
     @if($image)
         <!-- Main content container -->
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-full">
+            <!-- Breadcrumbs -->
+            <div class="mb-6">
+                <x-ui.breadcrumbs :items="[
+                    ['label' => 'Home', 'url' => route('dashboard')],
+                    ['label' => 'Galleries', 'url' => route('galleries.list')],
+                    ['label' => $gallery['name'] ?? 'Gallery', 'url' => route('galleries.show', $gallery['id'])],
+                    ['label' => $image['title'] ?? $image['original_filename']],
+                ]" />
+            </div>
+            
             <!-- Top action buttons -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold dark:text-white">
