@@ -57,7 +57,7 @@
                         </a>
                         <button type="button"
                             class="bg-gray-700 bg-opacity-70 dark:bg-black dark:bg-opacity-70 text-white p-2 rounded-md hover:bg-opacity-80 dark:hover:bg-opacity-80 hover:scale-105 transition-all duration-150 cursor-pointer"
-                            wire:confirm="Are you sure you want to delete this image?"
+                            wire:confirm="Are you sure you want to delete this image? This action cannot be undone."
                             wire:click="deleteImage('{{ $image['id'] }}')">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
                                 fill="currentColor">

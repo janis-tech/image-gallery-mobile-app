@@ -93,4 +93,13 @@ interface ImageGalleryHttpServiceInterface
      * @return array{success: bool, errors?: array<string, array<string>>, message?: string} Returns success status and any validation errors.
      */
     public function uploadGalleryImage(string $gallery_id, string $file_path, ?string $title = null, ?string $file_name = null, ?string $description = null, ?string $alt_text = null): array;
+
+    /**
+     * Delete an image from a gallery.
+     *
+     * @param  string  $gallery_id  The ID of the gallery containing the image.
+     * @param  string  $image_id  The ID of the image to delete.
+     * @return bool True if the image was deleted successfully, false otherwise.
+     */
+    public function deleteGalleryImage(string $gallery_id, string $image_id): bool;
 }

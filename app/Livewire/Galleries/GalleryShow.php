@@ -83,7 +83,15 @@ class GalleryShow extends Component
 
     public function deleteImage($image_id)
     {
-        // Implementation will be added later
+        $result = $this->imageGalleryHttpService->deleteGalleryImage($this->gallery_id, $image_id);
+
+        if ($result) {
+            session()->flash('message', 'Image deleted successfully!');
+        } else {
+            session()->flash('error', 'Failed to delete image. Please try again.');
+        }
+
+        $this->refreshImages();
     }
 
     public function uploadImages()

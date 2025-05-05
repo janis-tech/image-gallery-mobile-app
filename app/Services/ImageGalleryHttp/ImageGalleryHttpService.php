@@ -344,4 +344,22 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ];
         }
     }
+
+    public function deleteGalleryImage(string $gallery_id, string $image_id): bool
+    {
+        try {
+            $response = $this->client->request('DELETE', "galleries/{$gallery_id}/images/{$image_id}");
+            
+            return $response->getStatusCode() === 204;
+        } catch (GuzzleException $e) {
+            Log::error('Error deleting gallery image', [
+                'gallery_id' => $gallery_id,
+                'image_id' => $image_id,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            
+            return false;
+        }
+    }
 }
