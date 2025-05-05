@@ -80,4 +80,17 @@ interface ImageGalleryHttpServiceInterface
      * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
      */
     public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array;
+
+    /**
+     * Upload an image to a gallery.
+     *
+     * @param  string  $gallery_id  The ID of the gallery to add the image to.
+     * @param  string  $file_path  The path to the image file to upload.
+     * @param  ?string  $title  The title for the image (optional).
+     * @param  ?string  $file_name  The file name for the image (optional).
+     * @param  ?string  $description  The description for the image (optional).
+     * @param  ?string  $alt_text  The alt text for the image (optional).
+     * @return array{success: bool, errors?: array<string, array<string>>, message?: string} Returns success status and any validation errors.
+     */
+    public function uploadGalleryImage(string $gallery_id, string $file_path, ?string $title = null, ?string $file_name = null, ?string $description = null, ?string $alt_text = null): array;
 }

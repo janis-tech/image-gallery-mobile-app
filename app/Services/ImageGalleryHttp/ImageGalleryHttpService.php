@@ -17,7 +17,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
     {
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
-            'timeout' => 10.0,
+            'timeout' => 30.0,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
@@ -254,6 +254,93 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return [
                 'success' => false,
                 'message' => 'Failed to connect to the server',
+            ];
+        }
+    }
+
+    public function uploadGalleryImage(string $gallery_id, string $file_path, ?string $title = null, ?string $file_name = null, ?string $description = null, ?string $alt_text = null): array
+    {
+        try {
+            $multipart = [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($file_path, 'r'),
+                    'filename' => $file_name ?? basename($file_path),
+                ]
+            ];
+
+            // Add optional fields if provided
+            if ($title) {
+                $multipart[] = [
+                    'name' => 'title',
+                    'contents' => $title
+                ];
+            }
+
+            if ($file_name) {
+                $multipart[] = [
+                    'name' => 'file_name',
+                    'contents' => $file_name
+                ];
+            }
+
+            if ($description) {
+                $multipart[] = [
+                    'name' => 'description',
+                    'contents' => $description
+                ];
+            }
+
+            if ($alt_text) {
+                $multipart[] = [
+                    'name' => 'alt_text',
+                    'contents' => $alt_text
+                ];
+            }
+
+            $response = $this->client->request('POST', "galleries/{$gallery_id}/images", [
+                'multipart' => $multipart,
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return [
+                'success' => true,
+                'data' => $data['data'] ?? [],
+            ];
+
+        } catch (RequestException $e) {
+            if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
+                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+
+                return [
+                    'success' => false,
+                    'errors' => $responseBody['errors'] ?? [],
+                    'message' => $responseBody['message'] ?? 'Validation failed',
+                ];
+            }
+
+            Log::error('Error uploading image to gallery', [
+                'gallery_id' => $gallery_id,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'response' => $e->getResponse() ? json_decode($e->getResponse()->getBody()->getContents(), true) : null,
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Failed to upload image. Please try again later.',
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error uploading image to gallery', [
+                'gallery_id' => $gallery_id,
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'An unexpected error occurred. Please try again later.',
             ];
         }
     }

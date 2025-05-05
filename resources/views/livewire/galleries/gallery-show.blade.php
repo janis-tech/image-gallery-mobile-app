@@ -87,12 +87,6 @@
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">No images found</h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Add some images to this gallery.</p>
-                <button
-                    class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    wire:click="uploadImages">
-                    Upload Images
-                </button>
             </div>
         @endforelse
     </div>
@@ -104,7 +98,8 @@
             :key="'gallery-images-pagination-'.$currentPage" />
     </div>
 
-    <button
+    <a
+        href="{{ route('galleries.image.upload', $gallery['id']) }}" wire:navigate
         class="fixed bottom-8 right-8 flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-300 z-[9999]"
         wire:click="uploadImages" aria-label="Upload Images" style="position: fixed; bottom: 2rem; right: 2rem;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
@@ -112,5 +107,5 @@
                 d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
                 clip-rule="evenodd" />
         </svg>
-    </button>
+    </a>
 </div>
