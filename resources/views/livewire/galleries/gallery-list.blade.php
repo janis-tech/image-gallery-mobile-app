@@ -90,6 +90,14 @@
             </div>
         @endforelse
     </div>
+    
+    <div class="mt-8">
+        <livewire:components.array-pagination 
+            :pagination="$pagination" 
+            :currentPage="$currentPage" 
+            :key="'gallery-list-pagination-'.$currentPage" />
+    </div>
+    
     <a href="{{ route('galleries.create') }}"
         class="fixed bottom-8 right-8 flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-300 z-[9999]"
         aria-label="Create Gallery" style="position: fixed; bottom: 2rem; right: 2rem;">

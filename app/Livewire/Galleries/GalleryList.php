@@ -4,14 +4,21 @@ namespace App\Livewire\Galleries;
 
 use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
+use Livewire\Attributes\On;
 
 class GalleryList extends Component
 {
-    public $galleries = [];
+    public array $galleries = [];
+    public array $pagination = [];
+    
+    public int $currentPage = 1;
+    public int $perPage = 15;
+    public ?string $search = null;
 
-    public $page = 1;
-    public $per_page = 15;
-    public $search = null;
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'currentPage' => ['except' => 1, 'as' => 'page'],
+    ];
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
@@ -28,20 +35,37 @@ class GalleryList extends Component
     public function updated($attribute, $value)
     {
         if ($attribute == 'search') {
-            $this->page = 1;
+            $this->resetPage();
         }
-        if (in_array($attribute, ['page', 'search'])) {
+        if (in_array($attribute, ['search'])) {
             $this->refreshGalleries();
         }
     }
 
+    #[On('pageChange')]
+    public function handlePageChange($page, $pageName = 'page')
+    {
+        if ($pageName === 'page') {
+            $this->currentPage = $page;
+            $this->refreshGalleries();
+        }
+    }
+    
+    public function resetPage()
+    {
+        $this->currentPage = 1;
+    }
+
     public function refreshGalleries()
     {
-        $this->galleries = $this->imageGalleryHttpService->getGalleries(
-            page: $this->page,
-            per_page: $this->per_page,
+        $result = $this->imageGalleryHttpService->getGalleries(
+            page: $this->currentPage,
+            per_page: $this->perPage,
             search: $this->search
         );
+        
+        $this->galleries = $result['data'] ?? [];
+        $this->pagination = $result['pagination'] ?? [];
     }
 
     public function deleteGallery($gallery_id)

@@ -4,6 +4,7 @@ namespace App\Livewire\Galleries;
 
 use Livewire\Component;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
+use Livewire\Attributes\On;
 
 class GalleryShow extends Component
 {
@@ -11,8 +12,16 @@ class GalleryShow extends Component
 
     public array $gallery = [];
     public array $images = [];
+    public array $pagination = [];
     public string $gallery_id = '';
     public string $search = '';
+    public int $perPage = 12;
+    public int $currentPage = 1;
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'currentPage' => ['except' => 1, 'as' => 'page'],
+    ];
 
     public function boot()
     {
@@ -33,17 +42,37 @@ class GalleryShow extends Component
 
     public function refreshImages()
     {
-        $this->images = $this->imageGalleryHttpService->getGalleryImages(
+        $result = $this->imageGalleryHttpService->getGalleryImages(
             $this->gallery_id,
-            $this->search
+            $this->search,
+            $this->perPage,
+            $this->currentPage
         );
+        
+        $this->images = $result['data'] ?? [];
+        $this->pagination = $result['pagination'] ?? [];
+    }
+
+    #[On('pageChange')]
+    public function handlePageChange($page, $pageName = 'page')
+    {
+        if ($pageName === 'page') {
+            $this->currentPage = $page;
+            $this->refreshImages();
+        }
     }
 
     public function updated($attribute)
     {
         if ($attribute === 'search') {
+            $this->resetPage();
             $this->refreshImages();
         }
+    }
+    
+    public function resetPage()
+    {
+        $this->currentPage = 1;
     }
 
     public function deleteImage($image_id) {

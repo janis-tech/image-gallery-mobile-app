@@ -48,9 +48,11 @@ interface ImageGalleryHttpServiceInterface
      * Fetch images from a specific gallery.
      * @param string $id The ID of the gallery to fetch images from.
      * @param ?string $search The search term to filter images.
-     * @return array<mixed> An array of images in the gallery.
+     * @param ?int $perPage Number of items per page for pagination.
+     * @param ?int $page Current page number for pagination.
+     * @return array{data: array, pagination: array} An array containing images data and pagination metadata.
      */
-    public function getGalleryImages(string $id, ?string $search): array;
+    public function getGalleryImages(string $id, ?string $search = null, ?int $perPage = null, ?int $page = null);
 
     /**
      * Fetch a specific image from a gallery.

@@ -38,8 +38,19 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'query' => $query_params
             ]);
             
-            $data = json_decode($response->getBody()->getContents(), true);
-            return $data['data'] ?? [];
+            $responseData = json_decode($response->getBody()->getContents(), true);
+            
+            return [
+                'data' => $responseData['data'] ?? [],
+                'pagination' => [
+                    'total' => $responseData['meta']['total'] ?? count($responseData['data'] ?? []),
+                    'per_page' => $responseData['meta']['per_page'] ?? $per_page ?? 15,
+                    'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
+                    'last_page' => $responseData['meta']['last_page'] ?? 1,
+                    'from' => $responseData['meta']['from'] ?? 1,
+                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? [])
+                ]
+            ];
             
         } catch (GuzzleException $e) {
             throw new \Exception('Error fetching galleries: ' . $e->getMessage());
@@ -151,21 +162,40 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         }
     }
 
-    public function getGalleryImages(string $id, ?string $search = null): array
+    public function getGalleryImages(string $id, ?string $search = null, ?int $perPage = null, ?int $page = null)
     {
         try {
             $query_params = [];
             
-             if ($search) {
+            if ($search) {
                 $query_params['vector_search'] = $search;
+            }
+            
+            if ($perPage) {
+                $query_params['per_page'] = $perPage;
+            }
+            
+            if ($page) {
+                $query_params['page'] = $page;
             }
             
             $response = $this->client->request('GET', 'galleries/' . $id . '/images', [
                 'query' => $query_params
             ]);
             
-            $data = json_decode($response->getBody()->getContents(), true);
-            return $data['data'] ?? [];
+            $responseData = json_decode($response->getBody()->getContents(), true);
+            
+            return [
+                'data' => $responseData['data'] ?? [],
+                'pagination' => [
+                    'total' => $responseData['meta']['total'] ?? count($responseData['data'] ?? []),
+                    'per_page' => $responseData['meta']['per_page'] ?? $perPage ?? 12,
+                    'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
+                    'last_page' => $responseData['meta']['last_page'] ?? 1,
+                    'from' => $responseData['meta']['from'] ?? 1,
+                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? [])
+                ]
+            ];
             
         } catch (GuzzleException $e) {
             throw new \Exception('Error fetching gallery images: ' . $e->getMessage());
