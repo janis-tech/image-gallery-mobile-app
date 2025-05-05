@@ -8,12 +8,19 @@
         "framework"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nativephp.composer.sh"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.1.1",
-        "livewire/volt": "^1.7.0"
+        "livewire/volt": "^1.7.0",
+        "nativephp/mobile": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
