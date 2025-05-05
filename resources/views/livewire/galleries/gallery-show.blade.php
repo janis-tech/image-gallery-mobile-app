@@ -27,7 +27,7 @@
         @forelse ($images as $image)
             <div
                 class="relative bg-white dark:bg-[#161615] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-[#3E3E3A] group">
-                <a href="" target="_blank"
+                <a wire:navigate href="{{ route('galleries.image.show', [$gallery['id'], $image['id']]) }}" target="_blank"
                     class="absolute inset-0 z-10">
                     <span class="sr-only">View image</span>
                 </a>

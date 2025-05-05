@@ -8,6 +8,7 @@ use App\Livewire\Galleries\GalleryEdit;
 use App\Livewire\Galleries\GalleryList;
 use App\Livewire\Galleries\GalleryShow;
 use App\Livewire\Galleries\GalleryCreate;
+use App\Livewire\Galleries\Images\GalleryImageShow;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -31,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('galleries', GalleryList::class)->name('galleries.list');
     Route::get('galleries/{id}', GalleryShow::class)->name('galleries.show');
     Route::get('galleries/{id}/edit', GalleryEdit::class)->name('galleries.edit');
+
+    Route::get('galleries/{gallery_id}/images/{id}', GalleryImageShow::class)->name('galleries.image.show');
 });
 
 require __DIR__ . '/auth.php';

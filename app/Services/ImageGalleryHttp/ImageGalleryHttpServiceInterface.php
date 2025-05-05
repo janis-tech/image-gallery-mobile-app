@@ -51,4 +51,12 @@ interface ImageGalleryHttpServiceInterface
      */
     public function getGalleryImages(string $id): array;
 
+    /**
+     * Fetch a specific image from a gallery.
+     * @param string $gallery_id The ID of the gallery containing the image.
+     * @param string $image_id The ID of the image to fetch.
+     * @return array<string, mixed> An array containing the image data.
+     */
+    public function getGalleryImage(string $gallery_id, string $image_id): array;
+
 }
