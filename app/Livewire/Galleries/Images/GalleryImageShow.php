@@ -110,6 +110,26 @@ class GalleryImageShow extends Component
         $this->current_url_copied = true;
     }
 
+    public function deleteImage()
+    {
+        if (!$this->image || !isset($this->image['id'])) {
+            session()->flash('error', 'No image selected for deletion.');
+            return;
+        }
+
+        $result = $this->image_gallery_http_service->deleteGalleryImage(
+            $this->gallery['id'],
+            $this->image['id']
+        );
+
+        if ($result) {
+            session()->flash('message', 'Image deleted successfully!');
+            return $this->redirect(route('galleries.show', $this->gallery['id']), navigate: true);
+        } else {
+            session()->flash('error', 'Failed to delete image. Please try again.');
+        }
+    }
+
     public function render()
     {
         return view('livewire.galleries.images.gallery-image-show');

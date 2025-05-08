@@ -3,17 +3,47 @@
 namespace App\Services\ImageGalleryHttp;
 
 use GuzzleHttp\Client;
+use InvalidArgumentException;
+use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Log;
 
 class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 {
     const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
 
     private Client $client;
+    private string $entity_id;
 
-    public function __construct()
+    public function __construct(?string $entity_id)
+    {
+        $this->entity_id = $entity_id;
+        $this->initClient();
+    }
+
+    /**
+     * Set the entity ID to be used in the X-Entity-ID header.
+     *
+     * @param  ?string  $entity_id  The entity ID to use in requests.
+     * @return void
+     */
+    public function setEntityId(?string $entity_id): void
+    {
+
+        if($entity_id === null) {
+            throw new InvalidArgumentException('Entity ID cannot be null');
+        }
+
+        $this->entity_id = $entity_id;
+        $this->initClient();
+    }
+
+    /**
+     * Initialize the HTTP client with current configuration.
+     *
+     * @return void
+     */
+    private function initClient(): void
     {
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
@@ -21,6 +51,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
+                'X-Entity-ID' => $this->entity_id,
             ],
         ]);
     }
@@ -342,6 +373,24 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'success' => false,
                 'message' => 'An unexpected error occurred. Please try again later.',
             ];
+        }
+    }
+
+    public function deleteGalleryImage(string $gallery_id, string $image_id): bool
+    {
+        try {
+            $response = $this->client->request('DELETE', 'galleries/'.$gallery_id.'/images/'.$image_id);
+
+            return $response->getStatusCode() === 204;
+
+        } catch (GuzzleException $e) {
+            Log::error('Error deleting gallery image', [
+                'gallery_id' => $gallery_id,
+                'image_id' => $image_id,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            return false;
         }
     }
 }
