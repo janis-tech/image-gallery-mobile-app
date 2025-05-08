@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Galleries\Images;
 
-use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Livewire\Attributes\On;
+use Native\Mobile\Facades\System;
 use Illuminate\Support\Facades\Log;
+use Native\Mobile\Events\Camera\PhotoTaken;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
+use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 
 class GalleryImageUpload extends Component
 {
@@ -13,12 +16,13 @@ class GalleryImageUpload extends Component
 
     public string $gallery_id = '';
     public $image = null;
+    public string $image_data_url = '';
+    public string $temp_file_path = '';
     public ?array $gallery = [];
     public string $title = '';
     public string $description = '';
     public string $alt_text = '';
     public bool $is_uploading = false;
-
     public bool $show_camera = false;
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
@@ -50,11 +54,60 @@ class GalleryImageUpload extends Component
     public function toggleCamera()
     {
         $this->show_camera = !$this->show_camera;
+        $status = System::camera();
+
+        if ($status) {
+            $this->image = $status;
+            $this->show_camera = false;
+        } else {
+            session()->flash('error', 'Camera access denied or not available.');
+        }
+    }
+
+    #[On('native:' . PhotoTaken::class)]
+    public function handleCamera($path)
+    {
+        try {
+            $data = base64_encode(file_get_contents($path));
+            $mime = mime_content_type($path);
+            
+            $this->image_data_url = "data:{$mime};base64,{$data}";
+            $this->temp_file_path = $path;
+            $this->image = null;
+            
+            $this->show_camera = false;
+        } catch (\Exception $e) {
+            Log::error('Error handling camera photo', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            session()->flash('error', 'Failed to process camera photo.');
+        }
+    }
+
+    public function updatedImage()
+    {
+        if ($this->image) {
+            try {
+                $path = $this->image->getRealPath();
+                $data = base64_encode(file_get_contents($path));
+                $mime = mime_content_type($path);
+                
+                $this->image_data_url = "data:{$mime};base64,{$data}";
+                $this->temp_file_path = $path;
+            } catch (\Exception $e) {
+                Log::error('Error processing uploaded file', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+                session()->flash('error', 'Failed to process uploaded image.');
+            }
+        }
     }
 
     public function removeImage()
     {
-        $this->reset(['image']);
+        $this->reset(['image', 'image_data_url', 'temp_file_path']);
         $this->resetValidation('image');
     }
 
@@ -63,12 +116,17 @@ class GalleryImageUpload extends Component
         $this->is_uploading = true;
 
         try {
-            $temp_path = $this->image->getRealPath();
-            $file_name = $this->image->getClientOriginalName();
+            if (empty($this->temp_file_path)) {
+                $this->is_uploading = false;
+                session()->flash('error', 'No image selected.');
+                return;
+            }
+
+            $file_name = basename($this->temp_file_path);
             
             $result = $this->imageGalleryHttpService->uploadGalleryImage(
                 gallery_id: $this->gallery_id,
-                file_path: $temp_path,
+                file_path: $this->temp_file_path,
                 title: !empty($this->title) ? $this->title : null,
                 file_name: $file_name,
                 description: !empty($this->description) ? $this->description : null,
