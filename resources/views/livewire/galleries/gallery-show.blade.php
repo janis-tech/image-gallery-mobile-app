@@ -45,7 +45,7 @@
                             class="w-full h-full object-cover">
 
                     <div
-                        class="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+                        class="absolute top-2 right-2 flex space-x-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 z-20">
                         <a href="{{ route('galleries.image.edit', [$gallery['id'], $image['id']]) }}" wire:navigate
                             class="bg-gray-700 bg-opacity-70 dark:bg-black dark:bg-opacity-70 text-white p-2 rounded-md hover:bg-opacity-80 dark:hover:bg-opacity-80 hover:scale-105 transition-all duration-150 cursor-pointer">
                             
