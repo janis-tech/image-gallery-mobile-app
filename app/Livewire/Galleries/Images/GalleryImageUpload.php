@@ -2,27 +2,36 @@
 
 namespace App\Livewire\Galleries\Images;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
-use Native\Mobile\Facades\System;
-use Illuminate\Support\Facades\Log;
-use Native\Mobile\Events\Camera\PhotoTaken;
-use Livewire\Features\SupportFileUploads\WithFileUploads;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Native\Mobile\Events\Camera\PhotoTaken;
+use Native\Mobile\Facades\System;
 
 class GalleryImageUpload extends Component
 {
     use WithFileUploads;
 
     public string $gallery_id = '';
+
     public $image = null;
+
     public string $image_data_url = '';
+
     public string $temp_file_path = '';
+
     public ?array $gallery = [];
+
     public string $title = '';
+
     public string $description = '';
+
     public string $alt_text = '';
+
     public bool $is_uploading = false;
+
     public bool $show_camera = false;
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
@@ -37,8 +46,9 @@ class GalleryImageUpload extends Component
         $this->gallery_id = $gallery_id;
         try {
             $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
-            if (!$this->gallery) {
+            if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
+
                 return $this->redirect(route('galleries.list'), navigate: true);
             }
         } catch (\Exception $e) {
@@ -47,13 +57,14 @@ class GalleryImageUpload extends Component
                 'error' => $e->getMessage(),
             ]);
             session()->flash('error', 'Failed to load gallery. Please try again later.');
+
             return $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
     public function toggleCamera()
     {
-        $this->show_camera = !$this->show_camera;
+        $this->show_camera = ! $this->show_camera;
         $status = System::camera();
 
         if ($status) {
@@ -64,17 +75,17 @@ class GalleryImageUpload extends Component
         }
     }
 
-    #[On('native:' . PhotoTaken::class)]
+    #[On('native:'.PhotoTaken::class)]
     public function handleCamera($path)
     {
         try {
             $data = base64_encode(file_get_contents($path));
             $mime = mime_content_type($path);
-            
+
             $this->image_data_url = "data:{$mime};base64,{$data}";
             $this->temp_file_path = $path;
             $this->image = null;
-            
+
             $this->show_camera = false;
         } catch (\Exception $e) {
             Log::error('Error handling camera photo', [
@@ -92,7 +103,7 @@ class GalleryImageUpload extends Component
                 $path = $this->image->getRealPath();
                 $data = base64_encode(file_get_contents($path));
                 $mime = mime_content_type($path);
-                
+
                 $this->image_data_url = "data:{$mime};base64,{$data}";
                 $this->temp_file_path = $path;
             } catch (\Exception $e) {
@@ -119,25 +130,27 @@ class GalleryImageUpload extends Component
             if (empty($this->temp_file_path)) {
                 $this->is_uploading = false;
                 session()->flash('error', 'No image selected.');
+
                 return;
             }
 
             $file_name = basename($this->temp_file_path);
-            
+
             $result = $this->imageGalleryHttpService->uploadGalleryImage(
                 gallery_id: $this->gallery_id,
                 file_path: $this->temp_file_path,
-                title: !empty($this->title) ? $this->title : null,
+                title: ! empty($this->title) ? $this->title : null,
                 file_name: $file_name,
-                description: !empty($this->description) ? $this->description : null,
-                alt_text: !empty($this->alt_text) ? $this->alt_text : null
+                description: ! empty($this->description) ? $this->description : null,
+                alt_text: ! empty($this->alt_text) ? $this->alt_text : null
             );
 
             if ($result['success']) {
                 session()->flash('message', 'Image uploaded successfully!');
+
                 return $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
             } else {
-                if (isset($result['errors']) && !empty($result['errors'])) {
+                if (isset($result['errors']) && ! empty($result['errors'])) {
                     foreach ($result['errors'] as $field => $messages) {
                         foreach ((array) $messages as $message) {
                             $this->addError($field, $message);

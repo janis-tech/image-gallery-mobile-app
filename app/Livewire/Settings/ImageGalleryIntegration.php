@@ -3,7 +3,6 @@
 namespace App\Livewire\Settings;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -11,8 +10,9 @@ class ImageGalleryIntegration extends Component
 {
     #[Validate('nullable|string|size:120')]
     public $image_gallery_entity_id = '';
-    
+
     public $is_editing = false;
+
     public $validation_error = null;
 
     public function mount(): void
@@ -24,11 +24,11 @@ class ImageGalleryIntegration extends Component
     {
         try {
             $validated = $this->validate();
-            
+
             Auth::user()->update([
                 'image_gallery_entity_id' => $validated['image_gallery_entity_id'],
             ]);
-            
+
             $this->is_editing = false;
             $this->validation_error = null;
             $this->dispatch('image-gallery-integration-updated');
@@ -36,7 +36,7 @@ class ImageGalleryIntegration extends Component
             $this->validation_error = $e->errors()['image_gallery_entity_id'][0] ?? 'Validation failed';
         }
     }
-    
+
     public function cancelEdit(): void
     {
         $this->is_editing = false;

@@ -3,16 +3,17 @@
 namespace App\Services\ImageGalleryHttp;
 
 use GuzzleHttp\Client;
-use InvalidArgumentException;
-use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 {
     const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
 
     private Client $client;
+
     private string $entity_id;
 
     public function __construct(?string $entity_id)
@@ -25,12 +26,11 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
      * Set the entity ID to be used in the X-Entity-ID header.
      *
      * @param  ?string  $entity_id  The entity ID to use in requests.
-     * @return void
      */
     public function setEntityId(?string $entity_id): void
     {
 
-        if($entity_id === null) {
+        if ($entity_id === null) {
             throw new InvalidArgumentException('Entity ID cannot be null');
         }
 
@@ -40,8 +40,6 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
     /**
      * Initialize the HTTP client with current configuration.
-     *
-     * @return void
      */
     private function initClient(): void
     {
@@ -297,35 +295,35 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                     'name' => 'image',
                     'contents' => fopen($file_path, 'r'),
                     'filename' => $file_name ?? basename($file_path),
-                ]
+                ],
             ];
 
             // Add optional fields if provided
             if ($title) {
                 $multipart[] = [
                     'name' => 'title',
-                    'contents' => $title
+                    'contents' => $title,
                 ];
             }
 
             if ($file_name) {
                 $multipart[] = [
                     'name' => 'file_name',
-                    'contents' => $file_name
+                    'contents' => $file_name,
                 ];
             }
 
             if ($description) {
                 $multipart[] = [
                     'name' => 'description',
-                    'contents' => $description
+                    'contents' => $description,
                 ];
             }
 
             if ($alt_text) {
                 $multipart[] = [
                     'name' => 'alt_text',
-                    'contents' => $alt_text
+                    'contents' => $alt_text,
                 ];
             }
 
@@ -390,6 +388,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
             ]);
+
             return false;
         }
     }

@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ImageGalleryHttpServiceInterface::class, function ($app) {
             return new ImageGalleryHttpService(
-                Auth::check() ? Auth()->user()->image_gallery_entity_id  : null
+                Auth::check() ? Auth()->user()->image_gallery_entity_id : null
             );
         });
     }

@@ -28,11 +28,11 @@ class Register extends Component
     protected function generateUniqueEntityId(): string
     {
         $entity_id = Str::random(120);
-        
+
         while (User::where('image_gallery_entity_id', $entity_id)->exists()) {
             $entity_id = Str::random(120);
         }
-        
+
         return $entity_id;
     }
 

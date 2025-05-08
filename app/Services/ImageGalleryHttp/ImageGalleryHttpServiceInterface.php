@@ -8,7 +8,6 @@ interface ImageGalleryHttpServiceInterface
      * Set the entity ID to be used in the X-Entity-ID header.
      *
      * @param  string  $entity_id  The entity ID to use in requests.
-     * @return void
      */
     public function setEntityId(?string $entity_id): void;
 

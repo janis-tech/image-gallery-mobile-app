@@ -112,8 +112,9 @@ class GalleryImageShow extends Component
 
     public function deleteImage()
     {
-        if (!$this->image || !isset($this->image['id'])) {
+        if (! $this->image || ! isset($this->image['id'])) {
             session()->flash('error', 'No image selected for deletion.');
+
             return;
         }
 
@@ -124,6 +125,7 @@ class GalleryImageShow extends Component
 
         if ($result) {
             session()->flash('message', 'Image deleted successfully!');
+
             return $this->redirect(route('galleries.show', $this->gallery['id']), navigate: true);
         } else {
             session()->flash('error', 'Failed to delete image. Please try again.');

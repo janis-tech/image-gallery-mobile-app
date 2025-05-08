@@ -66,7 +66,6 @@ return [
     */
     'deeplink_host' => env('NATIVEPHP_DEEPLINK_HOST'),
 
-
     /*
     |--------------------------------------------------------------------------
     | App Author
@@ -175,5 +174,5 @@ return [
         'nfc' => false,
 
         'push_notifications' => false,
-    ]
+    ],
 ];

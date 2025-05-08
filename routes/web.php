@@ -1,17 +1,17 @@
 <?php
 
-use App\Livewire\Settings\Profile;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Appearance;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Galleries\GalleryCreate;
 use App\Livewire\Galleries\GalleryEdit;
 use App\Livewire\Galleries\GalleryList;
 use App\Livewire\Galleries\GalleryShow;
-use App\Livewire\Galleries\GalleryCreate;
-use App\Livewire\Settings\ImageGalleryIntegration;
 use App\Livewire\Galleries\Images\GalleryImageEdit;
 use App\Livewire\Galleries\Images\GalleryImageShow;
 use App\Livewire\Galleries\Images\GalleryImageUpload;
+use App\Livewire\Settings\Appearance;
+use App\Livewire\Settings\ImageGalleryIntegration;
+use App\Livewire\Settings\Password;
+use App\Livewire\Settings\Profile;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
