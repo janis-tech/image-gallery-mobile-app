@@ -1,16 +1,17 @@
 <?php
 
-use App\Livewire\Galleries\GalleryCreate;
+use App\Livewire\Settings\Profile;
+use App\Livewire\Settings\Password;
+use App\Livewire\Settings\Appearance;
+use Illuminate\Support\Facades\Route;
 use App\Livewire\Galleries\GalleryEdit;
 use App\Livewire\Galleries\GalleryList;
 use App\Livewire\Galleries\GalleryShow;
+use App\Livewire\Galleries\GalleryCreate;
+use App\Livewire\Settings\ImageGalleryIntegration;
 use App\Livewire\Galleries\Images\GalleryImageEdit;
 use App\Livewire\Galleries\Images\GalleryImageShow;
 use App\Livewire\Galleries\Images\GalleryImageUpload;
-use App\Livewire\Settings\Appearance;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Profile;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -30,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+    Route::get('settings/image-gallery-integration', ImageGalleryIntegration::class)->name('settings.image-gallery-integration');
 
     Route::get('galleries/create', GalleryCreate::class)->name('galleries.create');
     Route::get('galleries', GalleryList::class)->name('galleries.list');

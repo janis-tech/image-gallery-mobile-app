@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -22,6 +23,20 @@ class Register extends Component
     public string $password_confirmation = '';
 
     /**
+     * Generate a unique image gallery entity ID.
+     */
+    protected function generateUniqueEntityId(): string
+    {
+        $entity_id = Str::random(120);
+        
+        while (User::where('image_gallery_entity_id', $entity_id)->exists()) {
+            $entity_id = Str::random(120);
+        }
+        
+        return $entity_id;
+    }
+
+    /**
      * Handle an incoming registration request.
      */
     public function register(): void
@@ -33,6 +48,7 @@ class Register extends Component
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['image_gallery_entity_id'] = $this->generateUniqueEntityId();
 
         event(new Registered(($user = User::create($validated))));
 
