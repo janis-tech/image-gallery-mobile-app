@@ -20,13 +20,13 @@ class GalleryShow extends Component
 
     public string $search = '';
 
-    public int $perPage = 12;
+    public int $per_page = 12;
 
-    public int $currentPage = 1;
+    public int $current_page = 1;
 
-    protected $queryString = [
+    protected $query_string = [
         'search' => ['except' => ''],
-        'currentPage' => ['except' => 1, 'as' => 'page'],
+        'current_page' => ['except' => 1, 'as' => 'page'],
     ];
 
     public function boot()
@@ -51,8 +51,8 @@ class GalleryShow extends Component
         $result = $this->imageGalleryHttpService->getGalleryImages(
             $this->gallery_id,
             $this->search,
-            $this->perPage,
-            $this->currentPage
+            $this->per_page,
+            $this->current_page
         );
 
         $this->images = $result['data'] ?? [];
@@ -60,10 +60,10 @@ class GalleryShow extends Component
     }
 
     #[On('pageChange')]
-    public function handlePageChange($page, $pageName = 'page')
+    public function handlePageChange($page, $page_name = 'page')
     {
-        if ($pageName === 'page') {
-            $this->currentPage = $page;
+        if ($page_name === 'page') {
+            $this->current_page = $page;
             $this->refreshImages();
         }
     }
@@ -78,7 +78,7 @@ class GalleryShow extends Component
 
     public function resetPage()
     {
-        $this->currentPage = 1;
+        $this->current_page = 1;
     }
 
     public function deleteImage($image_id)

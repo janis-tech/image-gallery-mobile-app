@@ -94,8 +94,8 @@
     <div class="mt-8">
         <livewire:components.array-pagination 
             :pagination="$pagination" 
-            :currentPage="$currentPage" 
-            :key="'gallery-images-pagination-'.$currentPage" />
+            :current_page="$current_page" 
+            :key="'gallery-images-pagination-'.$current_page" />
     </div>
 
     <a

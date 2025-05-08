@@ -67,17 +67,17 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'query' => $query_params,
             ]);
 
-            $responseData = json_decode($response->getBody()->getContents(), true);
+            $response_data = json_decode($response->getBody()->getContents(), true);
 
             return [
-                'data' => $responseData['data'] ?? [],
+                'data' => $response_data['data'] ?? [],
                 'pagination' => [
-                    'total' => $responseData['meta']['total'] ?? count($responseData['data'] ?? []),
-                    'per_page' => $responseData['meta']['per_page'] ?? $per_page ?? 15,
-                    'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
-                    'last_page' => $responseData['meta']['last_page'] ?? 1,
-                    'from' => $responseData['meta']['from'] ?? 1,
-                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? []),
+                    'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
+                    'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 15,
+                    'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
+                    'last_page' => $response_data['meta']['last_page'] ?? 1,
+                    'from' => $response_data['meta']['from'] ?? 1,
+                    'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
                 ],
             ];
 
@@ -119,12 +119,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
-                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+                $response_body = json_decode($e->getResponse()->getBody()->getContents(), true);
 
                 return [
                     'success' => false,
-                    'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed',
+                    'errors' => $response_body['errors'] ?? [],
+                    'message' => $response_body['message'] ?? 'Validation failed',
                 ];
             }
 
@@ -157,12 +157,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
-                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+                $response_body = json_decode($e->getResponse()->getBody()->getContents(), true);
 
                 return [
                     'success' => false,
-                    'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed',
+                    'errors' => $response_body['errors'] ?? [],
+                    'message' => $response_body['message'] ?? 'Validation failed',
                 ];
             }
 
@@ -192,7 +192,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         }
     }
 
-    public function getGalleryImages(string $id, ?string $search = null, ?int $perPage = null, ?int $page = null)
+    public function getGalleryImages(string $id, ?string $search = null, ?int $per_page = null, ?int $page = null): array
     {
         try {
             $query_params = [];
@@ -201,8 +201,8 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 $query_params['vector_search'] = $search;
             }
 
-            if ($perPage) {
-                $query_params['per_page'] = $perPage;
+            if ($per_page) {
+                $query_params['per_page'] = $per_page;
             }
 
             if ($page) {
@@ -213,17 +213,17 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'query' => $query_params,
             ]);
 
-            $responseData = json_decode($response->getBody()->getContents(), true);
+            $response_data = json_decode($response->getBody()->getContents(), true);
 
             return [
-                'data' => $responseData['data'] ?? [],
+                'data' => $response_data['data'] ?? [],
                 'pagination' => [
-                    'total' => $responseData['meta']['total'] ?? count($responseData['data'] ?? []),
-                    'per_page' => $responseData['meta']['per_page'] ?? $perPage ?? 12,
-                    'current_page' => $responseData['meta']['current_page'] ?? $page ?? 1,
-                    'last_page' => $responseData['meta']['last_page'] ?? 1,
-                    'from' => $responseData['meta']['from'] ?? 1,
-                    'to' => $responseData['meta']['to'] ?? count($responseData['data'] ?? []),
+                    'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
+                    'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 12,
+                    'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
+                    'last_page' => $response_data['meta']['last_page'] ?? 1,
+                    'from' => $response_data['meta']['from'] ?? 1,
+                    'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
                 ],
             ];
 
@@ -263,12 +263,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
-                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+                $response_body = json_decode($e->getResponse()->getBody()->getContents(), true);
 
                 return [
                     'success' => false,
-                    'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed',
+                    'errors' => $response_body['errors'] ?? [],
+                    'message' => $response_body['message'] ?? 'Validation failed',
                 ];
             }
 
@@ -340,12 +340,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         } catch (RequestException $e) {
             if ($e->getResponse() && $e->getResponse()->getStatusCode() === 422) {
-                $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
+                $response_body = json_decode($e->getResponse()->getBody()->getContents(), true);
 
                 return [
                     'success' => false,
-                    'errors' => $responseBody['errors'] ?? [],
-                    'message' => $responseBody['message'] ?? 'Validation failed',
+                    'errors' => $response_body['errors'] ?? [],
+                    'message' => $response_body['message'] ?? 'Validation failed',
                 ];
             }
 

@@ -8,15 +8,15 @@ class ArrayPagination extends Component
 {
     public array $pagination = [];
 
-    public int $currentPage = 1;
+    public int $current_page = 1;
 
-    public string $pageName = 'page';
+    public string $page_name = 'page';
 
-    public function mount($pagination, $currentPage = 1, $pageName = 'page')
+    public function mount($pagination, $current_page = 1, $page_name = 'page')
     {
         $this->pagination = $pagination;
-        $this->currentPage = $currentPage;
-        $this->pageName = $pageName;
+        $this->current_page = $current_page;
+        $this->page_name = $page_name;
     }
 
     public function updating($name, $value) {}
@@ -26,30 +26,30 @@ class ArrayPagination extends Component
      */
     public function previousPage()
     {
-        if ($this->currentPage > 1) {
+        if ($this->current_page > 1) {
             $this->dispatch('pageChange',
-                page: $this->currentPage - 1,
-                pageName: $this->pageName
+                page: $this->current_page - 1,
+                page_name: $this->page_name
             );
         }
     }
 
     public function nextPage()
     {
-        if ($this->currentPage < ($this->pagination['last_page'] ?? 1)) {
+        if ($this->current_page < ($this->pagination['last_page'] ?? 1)) {
             $this->dispatch('pageChange',
-                page: $this->currentPage + 1,
-                pageName: $this->pageName
+                page: $this->current_page + 1,
+                page_name: $this->page_name
             );
         }
     }
 
     public function goToPage($page)
     {
-        if ($page >= 1 && $page <= ($this->pagination['last_page'] ?? 1) && $page != $this->currentPage) {
+        if ($page >= 1 && $page <= ($this->pagination['last_page'] ?? 1) && $page != $this->current_page) {
             $this->dispatch('pageChange',
                 page: $page,
-                pageName: $this->pageName
+                page_name: $this->page_name
             );
         }
     }

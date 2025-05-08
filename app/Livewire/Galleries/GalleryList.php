@@ -12,15 +12,15 @@ class GalleryList extends Component
 
     public array $pagination = [];
 
-    public int $currentPage = 1;
+    public int $current_page = 1;
 
-    public int $perPage = 15;
+    public int $per_page = 15;
 
     public ?string $search = null;
 
-    protected $queryString = [
+    protected $query_string = [
         'search' => ['except' => ''],
-        'currentPage' => ['except' => 1, 'as' => 'page'],
+        'current_page' => ['except' => 1, 'as' => 'page'],
     ];
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
@@ -46,24 +46,24 @@ class GalleryList extends Component
     }
 
     #[On('pageChange')]
-    public function handlePageChange($page, $pageName = 'page')
+    public function handlePageChange($page, $page_name = 'page')
     {
-        if ($pageName === 'page') {
-            $this->currentPage = $page;
+        if ($page_name === 'page') {
+            $this->current_page = $page;
             $this->refreshGalleries();
         }
     }
 
     public function resetPage()
     {
-        $this->currentPage = 1;
+        $this->current_page = 1;
     }
 
     public function refreshGalleries()
     {
         $result = $this->imageGalleryHttpService->getGalleries(
-            page: $this->currentPage,
-            per_page: $this->perPage,
+            page: $this->current_page,
+            per_page: $this->per_page,
             search: $this->search
         );
 
