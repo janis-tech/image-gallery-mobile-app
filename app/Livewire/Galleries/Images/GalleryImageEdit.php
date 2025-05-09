@@ -81,14 +81,14 @@ class GalleryImageEdit extends Component
                 ]), navigate: true);
             }
 
-            if (isset($result['errors']) && ! empty($result['errors'])) {
+            if (! empty($result['errors'])) {
                 foreach ($result['errors'] as $field => $messages) {
                     foreach ((array) $messages as $message) {
                         $this->addError($field, $message);
                     }
                 }
             } else {
-                session()->flash('error', $result['message'] ?? 'Failed to update image. Please try again.');
+                session()->flash('error', $result['message']);
             }
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');

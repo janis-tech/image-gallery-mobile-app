@@ -72,10 +72,6 @@ class GalleryImageShow extends Component
     {
         if (count($this->gallery_images) === 0) {
             $this->prepareGalleryImages();
-
-            if (count($this->gallery_images) === 0) {
-                return;
-            }
         }
 
         $index = max(0, min($index, count($this->gallery_images) - 1));

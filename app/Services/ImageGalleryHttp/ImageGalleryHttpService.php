@@ -129,6 +129,8 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
             return [
                 'success' => true,
+                'errors' => [],
+                'message' => 'Gallery created successfully',
             ];
 
         } catch (RequestException $e) {
@@ -151,6 +153,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return [
                 'success' => false,
                 'message' => 'Failed to connect to the server',
+                'errors' => [],
             ];
         }
     }
@@ -167,6 +170,8 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
             return [
                 'success' => true,
+                'errors' => [],
+                'message' => 'Gallery updated successfully',
             ];
 
         } catch (RequestException $e) {
@@ -190,6 +195,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return [
                 'success' => false,
                 'message' => 'Failed to connect to the server',
+                'errors' => [],
             ];
         }
     }
@@ -280,6 +286,8 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
             return [
                 'success' => true,
+                'errors' => [],
+                'message' => 'Image updated successfully',
             ];
 
         } catch (RequestException $e) {
@@ -303,6 +311,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
             return [
                 'success' => false,
+                'errors' => [],
                 'message' => 'Failed to connect to the server',
             ];
         }

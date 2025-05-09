@@ -38,7 +38,7 @@ interface ImageGalleryHttpServiceInterface
      *
      * @param  string  $name  The name of the gallery.
      * @param  string  $description  The description of the gallery.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function createGallery(string $name, string $description): array;
 
@@ -48,7 +48,7 @@ interface ImageGalleryHttpServiceInterface
      * @param  string  $id  The ID of the gallery to update.
      * @param  string  $name  The updated name of the gallery.
      * @param  string  $description  The updated description of the gallery.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function updateGallery(string $id, string $name, string $description): array;
 
@@ -88,7 +88,7 @@ interface ImageGalleryHttpServiceInterface
      * @param  string  $title  The new title for the image.
      * @param  string  $alt_text  The new alt text for the image.
      * @param  string  $description  The new description for the image.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array;
 
