@@ -5,6 +5,7 @@ namespace App\Livewire\Galleries\Images;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Exception;
 
 class GalleryImageEdit extends Component
 {
@@ -44,28 +45,6 @@ class GalleryImageEdit extends Component
         $this->loadImage($id);
     }
 
-    private function loadImage(string $image_id): void
-    {
-        try {
-            $image_dto = $this->imageGalleryHttpService->getGalleryImage($this->gallery_id, $image_id);
-            $this->image = $image_dto->toArray();
-
-            if (! $this->image) {
-                session()->flash('error', 'Image not found.');
-
-                $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
-            }
-
-            $this->title = $this->image['title'] ;
-            $this->alt_text = $this->image['alt_text'];
-            $this->description = $this->image['description'];
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to load image. Please try again later.');
-
-            $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
-        }
-    }
-
     public function updateImage(): void
     {
         $this->validate();
@@ -97,7 +76,7 @@ class GalleryImageEdit extends Component
             } else {
                 session()->flash('error', $result['message']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
             $this->redirect(route('galleries.image.show', [
@@ -110,5 +89,27 @@ class GalleryImageEdit extends Component
     public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.images.gallery-image-edit');
+    }
+
+    private function loadImage(string $image_id): void
+    {
+        try {
+            $image_dto = $this->imageGalleryHttpService->getGalleryImage($this->gallery_id, $image_id);
+            $this->image = $image_dto->toArray();
+
+            if (! $this->image) {
+                session()->flash('error', 'Image not found.');
+
+                $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
+            }
+
+            $this->title = $this->image['title'] ;
+            $this->alt_text = $this->image['alt_text'];
+            $this->description = $this->image['description'];
+        } catch (Exception $e) {
+            session()->flash('error', 'Failed to load image. Please try again later.');
+
+            $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
+        }
     }
 }

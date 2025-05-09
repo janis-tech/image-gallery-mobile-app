@@ -46,7 +46,7 @@ class GalleryList extends Component
 
     public function updated(string $attribute): void
     {
-        if ($attribute == 'search') {
+        if ($attribute === 'search') {
             $this->resetPage();
         }
         if (in_array($attribute, ['search'], true)) {
@@ -78,7 +78,7 @@ class GalleryList extends Component
 
         $data_array = $result->toArray();
         $this->galleries = $data_array['data'];
-        $this->pagination =$data_array['pagination'];
+        $this->pagination = $data_array['pagination'];
     }
 
     public function deleteGallery(string $gallery_id): void

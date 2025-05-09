@@ -43,7 +43,8 @@ class GalleryImageDTO
         public readonly ?array $presets,
         public readonly string $created_at,
         public readonly string $updated_at,
-    ) {}
+    ) {
+    }
 
     /**
      * Create a new GalleryImageDTO instance from an array.

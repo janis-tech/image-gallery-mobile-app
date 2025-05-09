@@ -5,6 +5,7 @@ namespace App\Livewire\Galleries;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Exception;
 
 class GalleryCreate extends Component
 {
@@ -47,7 +48,7 @@ class GalleryCreate extends Component
             } else {
                 session()->flash('error', $result['message']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
             $this->redirect(route('galleries.list'), navigate: true);

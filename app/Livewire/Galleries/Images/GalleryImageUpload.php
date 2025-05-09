@@ -10,6 +10,7 @@ use Native\Mobile\Events\Camera\PhotoTaken;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
+use Exception;
 
 class GalleryImageUpload extends Component
 {
@@ -17,7 +18,7 @@ class GalleryImageUpload extends Component
 
     public string $gallery_id = '';
 
-    public  ?TemporaryUploadedFile $image = null;
+    public ?TemporaryUploadedFile $image = null;
 
     public string $image_data_url = '';
 
@@ -51,13 +52,13 @@ class GalleryImageUpload extends Component
         try {
             $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
             $this->gallery = $gallery_dto->toArray();
-            
+
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
                 $this->redirect(route('galleries.list'), navigate: true);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error loading gallery', [
                 'gallery_id' => $this->gallery_id,
                 'error' => $e->getMessage(),
@@ -92,7 +93,7 @@ class GalleryImageUpload extends Component
             $this->image = null;
 
             $this->show_camera = false;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error handling camera photo', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -111,7 +112,7 @@ class GalleryImageUpload extends Component
 
                 $this->image_data_url = "data:{$mime};base64,{$data}";
                 $this->temp_file_path = $path;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Error processing uploaded file', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString(),
@@ -165,7 +166,7 @@ class GalleryImageUpload extends Component
                     session()->flash('error', $result['message'] ?? 'Failed to upload image. Please try again.');
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error uploading image', [
                 'gallery_id' => $this->gallery_id,
                 'error' => $e->getMessage(),

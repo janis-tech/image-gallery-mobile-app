@@ -23,20 +23,6 @@ class Register extends Component
     public string $password_confirmation = '';
 
     /**
-     * Generate a unique image gallery entity ID.
-     */
-    protected function generateUniqueEntityId(): string
-    {
-        $entity_id = Str::random(120);
-
-        while (User::where('image_gallery_entity_id', $entity_id)->exists()) {
-            $entity_id = Str::random(120);
-        }
-
-        return $entity_id;
-    }
-
-    /**
      * Handle an incoming registration request.
      */
     public function register(): void
@@ -55,5 +41,19 @@ class Register extends Component
         Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
+    }
+
+    /**
+     * Generate a unique image gallery entity ID.
+     */
+    protected function generateUniqueEntityId(): string
+    {
+        $entity_id = Str::random(120);
+
+        while (User::where('image_gallery_entity_id', $entity_id)->exists()) {
+            $entity_id = Str::random(120);
+        }
+
+        return $entity_id;
     }
 }

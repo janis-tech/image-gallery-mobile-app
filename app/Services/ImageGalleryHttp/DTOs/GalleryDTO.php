@@ -23,7 +23,8 @@ class GalleryDTO
         public readonly string $updated_at,
         public readonly int $images_count = 0,
         public readonly array $first_image = [],
-    ) {}
+    ) {
+    }
 
     /**
      * Create a new GalleryDTO instance from an array.

@@ -5,6 +5,7 @@ namespace App\Livewire\Galleries;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Exception;
 
 class GalleryEdit extends Component
 {
@@ -48,7 +49,7 @@ class GalleryEdit extends Component
 
             $this->name = $this->gallery['name'];
             $this->description = $this->gallery['description'];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 
             $this->redirect(route('galleries.list'), navigate: true);
@@ -81,7 +82,7 @@ class GalleryEdit extends Component
             } else {
                 session()->flash('error', $result['message']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
             $this->redirect(route('galleries.list'), navigate: true);

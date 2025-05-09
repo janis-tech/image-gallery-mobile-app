@@ -11,10 +11,11 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
+use Exception;
 
 class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 {
-    const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
+    public const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
 
     private Client $client;
 
@@ -41,22 +42,6 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         $this->initClient();
     }
 
-    /**
-     * Initialize the HTTP client with current configuration.
-     */
-    private function initClient(): void
-    {
-        $this->client = new Client([
-            'base_uri' => self::BASE_URL,
-            'timeout' => 30.0,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'X-Entity-ID' => $this->entity_id,
-            ],
-        ]);
-    }
-
     public function getGalleries(?int $page, ?int $per_page, ?string $search): PaginatedCollectionDTO
     {
         $query_params = array_filter([
@@ -71,7 +56,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $response_data = json_decode($response->getBody()->getContents(), true);
-            
+
             $pagination = [
                 'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
                 'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 15,
@@ -92,7 +77,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             );
 
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching galleries: '.$e->getMessage());
+            throw new Exception('Error fetching galleries: '.$e->getMessage());
         }
     }
 
@@ -113,7 +98,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             if ($e->getCode() === 404) {
                 return null;
             }
-            throw new \Exception('Error fetching gallery: '.$e->getMessage());
+            throw new Exception('Error fetching gallery: '.$e->getMessage());
         }
     }
 
@@ -208,7 +193,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return $response->getStatusCode() === 204;
 
         } catch (GuzzleException $e) {
-            throw new \Exception('Error deleting gallery: '.$e->getMessage());
+            throw new Exception('Error deleting gallery: '.$e->getMessage());
         }
     }
 
@@ -234,7 +219,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $response_data = json_decode($response->getBody()->getContents(), true);
-            
+
             $pagination = [
                 'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
                 'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 12,
@@ -255,7 +240,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             );
 
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching gallery images: '.$e->getMessage());
+            throw new Exception('Error fetching gallery images: '.$e->getMessage());
         }
     }
 
@@ -269,7 +254,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return GalleryImageDTO::fromArray($data['data'] ?? []);
 
         } catch (GuzzleException $e) {
-            throw new \Exception('Error fetching image: '.$e->getMessage());
+            throw new Exception('Error fetching image: '.$e->getMessage());
         }
     }
 
@@ -391,7 +376,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
                 'success' => false,
                 'message' => 'Failed to upload image. Please try again later.',
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error uploading image to gallery', [
                 'gallery_id' => $gallery_id,
                 'message' => $e->getMessage(),
@@ -422,5 +407,21 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
             return false;
         }
+    }
+
+    /**
+     * Initialize the HTTP client with current configuration.
+     */
+    private function initClient(): void
+    {
+        $this->client = new Client([
+            'base_uri' => self::BASE_URL,
+            'timeout' => 30.0,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'X-Entity-ID' => $this->entity_id,
+            ],
+        ]);
     }
 }

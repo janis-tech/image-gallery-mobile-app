@@ -8,8 +8,6 @@ use Livewire\Component;
 
 class GalleryShow extends Component
 {
-    private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
-
     /**
      * @var array<string, string>
      */
@@ -40,6 +38,8 @@ class GalleryShow extends Component
         'search' => ['except' => ''],
         'current_page' => ['except' => 1, 'as' => 'page'],
     ];
+
+    private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
     public function boot(): void
     {

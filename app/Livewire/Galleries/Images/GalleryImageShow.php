@@ -46,7 +46,7 @@ class GalleryImageShow extends Component
 
     /**
      * Handle the 'show-image' event to display image details
-     * 
+     *
      * @param array{
      *     id: string,
      *     gallery_id: string,
@@ -66,7 +66,7 @@ class GalleryImageShow extends Component
      *     created_at: string,
      *     updated_at: string
      * } $image_data The complete image data object
-     * 
+     *
      * @return void
      */
     #[On('show-image')]
@@ -76,27 +76,6 @@ class GalleryImageShow extends Component
 
         if (empty($this->image)) {
             $this->prepareGalleryImages();
-        }
-    }
-
-    private function prepareGalleryImages(): void
-    {
-        $this->gallery_images = [];
-
-        if (isset($this->image['file_url'])) {
-            $this->gallery_images[] = [
-                'url' => $this->image['file_url'],
-                'title' => 'Original',
-            ];
-
-            if (isset($this->image['presets']) && is_array($this->image['presets'])) {
-                foreach ($this->image['presets'] as $preset_name => $preset_url) {
-                    $this->gallery_images[] = [
-                        'url' => $preset_url,
-                        'title' => ucfirst($preset_name),
-                    ];
-                }
-            }
         }
     }
 
@@ -165,5 +144,26 @@ class GalleryImageShow extends Component
     public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.images.gallery-image-show');
+    }
+
+    private function prepareGalleryImages(): void
+    {
+        $this->gallery_images = [];
+
+        if (isset($this->image['file_url'])) {
+            $this->gallery_images[] = [
+                'url' => $this->image['file_url'],
+                'title' => 'Original',
+            ];
+
+            if (isset($this->image['presets']) && is_array($this->image['presets'])) {
+                foreach ($this->image['presets'] as $preset_name => $preset_url) {
+                    $this->gallery_images[] = [
+                        'url' => $preset_url,
+                        'title' => ucfirst($preset_name),
+                    ];
+                }
+            }
+        }
     }
 }

@@ -29,7 +29,9 @@ class ArrayPagination extends Component
         $this->page_name = $page_name;
     }
 
-    public function updating(string $name, string $value): void {}
+    public function updating(string $name, string $value): void
+    {
+    }
 
     /**
      * Go to the previous page and emit an event
@@ -37,17 +39,19 @@ class ArrayPagination extends Component
     public function previousPage(): void
     {
         if ($this->current_page > 1) {
-            $this->dispatch('pageChange',
+            $this->dispatch(
+                'pageChange',
                 page: $this->current_page - 1,
                 page_name: $this->page_name
             );
         }
     }
 
-    public function nextPage():void
+    public function nextPage(): void
     {
         if ($this->current_page < $this->getLastPage()) {
-            $this->dispatch('pageChange',
+            $this->dispatch(
+                'pageChange',
                 page: $this->current_page + 1,
                 page_name: $this->page_name
             );
@@ -56,17 +60,23 @@ class ArrayPagination extends Component
 
     public function goToPage(int $page): void
     {
-        if ($page >= 1 && $page <= $this->getLastPage() && $page != $this->current_page) {
-            $this->dispatch('pageChange',
+        if ($page >= 1 && $page <= $this->getLastPage() && $page !== $this->current_page) {
+            $this->dispatch(
+                'pageChange',
                 page: $page,
                 page_name: $this->page_name
             );
         }
     }
 
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return view('livewire.components.array-pagination');
+    }
+
     /**
      * Get the last page number regardless of pagination type
-     * 
+     *
      * @return int
      */
     private function getLastPage(): int
@@ -74,12 +84,7 @@ class ArrayPagination extends Component
         if ($this->pagination instanceof PaginationDTO) {
             return $this->pagination->last_page;
         }
-        
-        return $this->pagination['last_page'] ?? 1;
-    }
 
-    public function render(): \Illuminate\Contracts\View\View
-    {
-        return view('livewire.components.array-pagination');
+        return $this->pagination['last_page'] ?? 1;
     }
 }

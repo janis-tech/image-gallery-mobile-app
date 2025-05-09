@@ -1,0 +1,68 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "explicit_string_variable": true,
+        "array_indentation": true,
+        "array_syntax": {
+            "syntax": "short"
+        },
+        "attribute_empty_parentheses": true,
+        "lowercase_keywords": true,
+        "lowercase_static_reference": true,
+        "global_namespace_import": true,
+        "mb_str_functions": true,
+        "no_useless_else": true,
+        "ordered_class_elements": {
+            "order": [
+                "use_trait",
+                "case",
+                "constant",
+                "constant_public",
+                "constant_protected",
+                "constant_private",
+                "property_public",
+                "property_protected",
+                "property_private",
+                "construct",
+                "destruct",
+                "magic",
+                "phpunit",
+                "method_abstract",
+                "method_public_static",
+                "method_public",
+                "method_protected_static",
+                "method_protected",
+                "method_private_static",
+                "method_private"
+            ],
+            "sort_algorithm": "none"
+        },
+        "ordered_interfaces": true,
+        "ordered_traits": true,
+        "php_unit_attributes": true,
+        "phpdoc_param_order": true,
+        "class_attributes_separation": true,
+        "clean_namespace": true,
+        "combine_consecutive_issets": true,
+        "combine_consecutive_unsets": true,
+        "constant_case": {
+            "case": "lower"
+        },
+        "control_structure_braces": true,
+        "declare_equal_normalize": true,
+        "encoding": true,
+        "explicit_indirect_variable": true,
+        "full_opening_tag": true,
+        "function_declaration": true,
+        "lowercase_cast": true,
+        "method_chaining_indentation": true,
+        "native_function_casing": true,
+        "no_empty_phpdoc": true,
+        "no_unused_imports": true,
+        "single_import_per_statement": true,
+        "strict_comparison": true,
+        "php_unit_method_casing": {
+            "case": "snake_case"
+        }
+    }
+}

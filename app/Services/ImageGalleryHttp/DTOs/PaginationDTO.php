@@ -21,7 +21,8 @@ class PaginationDTO
         public readonly int $last_page,
         public readonly int $from,
         public readonly int $to,
-    ) {}
+    ) {
+    }
 
     /**
      * Create a new PaginationDTO instance from an array.
