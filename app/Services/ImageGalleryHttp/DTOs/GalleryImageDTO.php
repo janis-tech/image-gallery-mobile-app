@@ -9,9 +9,9 @@ class GalleryImageDTO
      *
      * @param string $id The image ID
      * @param string $gallery_id The gallery ID
-     * @param string|null $title The image title
-     * @param string|null $description The image description
-     * @param string|null $alt_text The image alt text
+     * @param string $title The image title
+     * @param string $description The image description
+     * @param string $alt_text The image alt text
      * @param string|null $file_name The image file name
      * @param string|null $original_filename The original image file name
      * @param int|null $file_size The image file size
@@ -21,16 +21,16 @@ class GalleryImageDTO
      * @param string|null $file_path The image file path
      * @param string|null $file_url The image file URL
      * @param string|null $generated_caption The generated image caption
-     * @param array|null $presets The image presets (thumbnails)
+     * @param array<string, string>|null $presets The image presets
      * @param string $created_at The creation timestamp
      * @param string $updated_at The last update timestamp
      */
     public function __construct(
         public readonly string $id,
         public readonly string $gallery_id,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?string $alt_text,
+        public readonly string $title,
+        public readonly string $description,
+        public readonly string $alt_text,
         public readonly ?string $file_name,
         public readonly ?string $original_filename,
         public readonly ?int $file_size,
@@ -56,9 +56,9 @@ class GalleryImageDTO
         return new self(
             id: $data['id'] ?? '',
             gallery_id: $data['gallery_id'] ?? '',
-            title: $data['title'] ?? null,
-            description: $data['description'] ?? null,
-            alt_text: $data['alt_text'] ?? null,
+            title: $data['title'] ?? '',
+            description: $data['description'] ?? '',
+            alt_text: $data['alt_text'] ?? '',
             file_name: $data['file_name'] ?? null,
             original_filename: $data['original_filename'] ?? null,
             file_size: is_numeric($data['file_size'] ?? null) ? (int) $data['file_size'] : null,

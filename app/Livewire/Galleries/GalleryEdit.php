@@ -10,28 +10,31 @@ class GalleryEdit extends Component
 {
     public string $gallery_id;
 
+    /**
+     * @var array<string, mixed>
+     */
     public ?array $gallery;
 
     #[Validate('required|string|max:255')]
-    public $name = '';
+    public string $name = '';
 
     #[Validate('string|max:255')]
-    public $description = '';
+    public string $description = '';
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount($id)
+    public function mount(string $id): void
     {
         $this->gallery_id = $id;
         $this->loadGallery();
     }
 
-    public function loadGallery()
+    public function loadGallery(): void
     {
         try {
             $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
@@ -40,7 +43,7 @@ class GalleryEdit extends Component
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
-                return $this->redirect(route('galleries.list'), navigate: true);
+                $this->redirect(route('galleries.list'), navigate: true);
             }
 
             $this->name = $this->gallery['name'];
@@ -48,11 +51,11 @@ class GalleryEdit extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 
-            return $this->redirect(route('galleries.list'), navigate: true);
+            $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
-    public function updateGallery()
+    public function updateGallery(): void
     {
         $this->validate();
 
@@ -66,7 +69,7 @@ class GalleryEdit extends Component
             if ($result['success']) {
                 session()->flash('message', 'Gallery updated successfully!');
 
-                return $this->redirect(route('galleries.list'), navigate: true);
+                $this->redirect(route('galleries.list'), navigate: true);
             }
 
             if (! empty($result['errors'])) {
@@ -81,11 +84,11 @@ class GalleryEdit extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return $this->redirect(route('galleries.list'), navigate: true);
+            $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.gallery-edit');
     }

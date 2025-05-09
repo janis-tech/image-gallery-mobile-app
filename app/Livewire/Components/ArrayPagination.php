@@ -8,7 +8,7 @@ use Livewire\Component;
 class ArrayPagination extends Component
 {
     /**
-     * @var array|PaginationDTO
+     * @var array<mixed>|PaginationDTO
      */
     public $pagination = [];
 
@@ -16,19 +16,25 @@ class ArrayPagination extends Component
 
     public string $page_name = 'page';
 
-    public function mount($pagination, $current_page = 1, $page_name = 'page')
+    /**
+     * @param array<mixed> $pagination
+     * @param int $current_page
+     * @param string $page_name
+     * @return void
+     */
+    public function mount(array $pagination, int $current_page = 1, string $page_name = 'page'): void
     {
         $this->pagination = $pagination;
         $this->current_page = $current_page;
         $this->page_name = $page_name;
     }
 
-    public function updating($name, $value) {}
+    public function updating(string $name, string $value): void {}
 
     /**
      * Go to the previous page and emit an event
      */
-    public function previousPage()
+    public function previousPage(): void
     {
         if ($this->current_page > 1) {
             $this->dispatch('pageChange',
@@ -38,7 +44,7 @@ class ArrayPagination extends Component
         }
     }
 
-    public function nextPage()
+    public function nextPage():void
     {
         if ($this->current_page < $this->getLastPage()) {
             $this->dispatch('pageChange',
@@ -48,7 +54,7 @@ class ArrayPagination extends Component
         }
     }
 
-    public function goToPage($page)
+    public function goToPage(int $page): void
     {
         if ($page >= 1 && $page <= $this->getLastPage() && $page != $this->current_page) {
             $this->dispatch('pageChange',
@@ -72,7 +78,7 @@ class ArrayPagination extends Component
         return $this->pagination['last_page'] ?? 1;
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.components.array-pagination');
     }

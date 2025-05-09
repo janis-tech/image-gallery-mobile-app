@@ -14,7 +14,7 @@ parameters:
         - routes/
 
     # Level 10 is the highest level
-    level: 4
+    level: 6
     
     bootstrapFiles:
         - vendor/autoload.php

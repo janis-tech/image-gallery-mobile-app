@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Galleries\Images;
 
-use App\Services\ImageGalleryHttp\DTOs\GalleryDTO;
-use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
-use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\WithFileUploads;
-use Native\Mobile\Events\Camera\PhotoTaken;
+use Livewire\Attributes\On;
 use Native\Mobile\Facades\System;
+use Illuminate\Support\Facades\Log;
+use Native\Mobile\Events\Camera\PhotoTaken;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 
 class GalleryImageUpload extends Component
 {
@@ -17,12 +17,15 @@ class GalleryImageUpload extends Component
 
     public string $gallery_id = '';
 
-    public $image = null;
+    public  ?TemporaryUploadedFile $image = null;
 
     public string $image_data_url = '';
 
     public string $temp_file_path = '';
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $gallery;
 
     public string $title = '';
@@ -37,12 +40,12 @@ class GalleryImageUpload extends Component
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount($gallery_id)
+    public function mount(string $gallery_id): void
     {
         $this->gallery_id = $gallery_id;
         try {
@@ -52,7 +55,7 @@ class GalleryImageUpload extends Component
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
-                return $this->redirect(route('galleries.list'), navigate: true);
+                $this->redirect(route('galleries.list'), navigate: true);
             }
         } catch (\Exception $e) {
             Log::error('Error loading gallery', [
@@ -61,17 +64,16 @@ class GalleryImageUpload extends Component
             ]);
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 
-            return $this->redirect(route('galleries.list'), navigate: true);
+            $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
-    public function toggleCamera()
+    public function toggleCamera(): void
     {
         $this->show_camera = ! $this->show_camera;
         $status = System::camera();
 
         if ($status) {
-            $this->image = $status;
             $this->show_camera = false;
         } else {
             session()->flash('error', 'Camera access denied or not available.');
@@ -79,7 +81,7 @@ class GalleryImageUpload extends Component
     }
 
     #[On('native:'.PhotoTaken::class)]
-    public function handleCamera($path)
+    public function handleCamera(string $path): void
     {
         try {
             $data = base64_encode(file_get_contents($path));
@@ -99,7 +101,7 @@ class GalleryImageUpload extends Component
         }
     }
 
-    public function updatedImage()
+    public function updatedImage(): void
     {
         if ($this->image) {
             try {
@@ -119,13 +121,13 @@ class GalleryImageUpload extends Component
         }
     }
 
-    public function removeImage()
+    public function removeImage(): void
     {
         $this->reset(['image', 'image_data_url', 'temp_file_path']);
         $this->resetValidation('image');
     }
 
-    public function uploadImage()
+    public function uploadImage(): void
     {
         $this->is_uploading = true;
 
@@ -151,7 +153,7 @@ class GalleryImageUpload extends Component
             if ($result['success']) {
                 session()->flash('message', 'Image uploaded successfully!');
 
-                return $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
+                $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
             } else {
                 if (isset($result['errors']) && ! empty($result['errors'])) {
                     foreach ($result['errors'] as $field => $messages) {
@@ -175,7 +177,7 @@ class GalleryImageUpload extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.images.gallery-image-upload');
     }

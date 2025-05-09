@@ -9,19 +9,19 @@ use Livewire\Component;
 class GalleryCreate extends Component
 {
     #[Validate('required|string|max:255')]
-    public $name = '';
+    public string $name = '';
 
     #[Validate('string|max:10000')]
-    public $description = '';
+    public string $description = '';
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function createGallery()
+    public function createGallery(): void
     {
         $this->validate();
 
@@ -35,7 +35,7 @@ class GalleryCreate extends Component
             if ($result['success']) {
                 session()->flash('message', 'Gallery created successfully!');
 
-                return $this->redirect(route('galleries.list'), navigate: true);
+                $this->redirect(route('galleries.list'), navigate: true);
             }
 
             if (! empty($result['errors'])) {
@@ -50,11 +50,11 @@ class GalleryCreate extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return $this->redirect(route('galleries.list'), navigate: true);
+            $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.gallery-create');
     }

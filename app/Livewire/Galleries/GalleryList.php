@@ -9,13 +9,12 @@ use Livewire\Component;
 class GalleryList extends Component
 {
     /**
-     * @var array<int, array<string, mixed>>
+     * @var array<int, array<array<string, mixed>>>
      */
     public array $galleries = [];
 
-
     /**
-     * The array representation of pagination data for Livewire compatibility
+     * @var array<mixed>
      */
     public array $pagination = [];
 
@@ -25,24 +24,27 @@ class GalleryList extends Component
 
     public ?string $search = null;
 
-    protected $query_string = [
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $query_string = [
         'search' => ['except' => ''],
         'current_page' => ['except' => 1, 'as' => 'page'],
     ];
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->refreshGalleries();
     }
 
-    public function updated($attribute, $value)
+    public function updated(string $attribute): void
     {
         if ($attribute == 'search') {
             $this->resetPage();
@@ -53,7 +55,7 @@ class GalleryList extends Component
     }
 
     #[On('pageChange')]
-    public function handlePageChange($page, $page_name = 'page')
+    public function handlePageChange(int $page, string $page_name = 'page'): void
     {
         if ($page_name === 'page') {
             $this->current_page = $page;
@@ -61,12 +63,12 @@ class GalleryList extends Component
         }
     }
 
-    public function resetPage()
+    public function resetPage(): void
     {
         $this->current_page = 1;
     }
 
-    public function refreshGalleries()
+    public function refreshGalleries(): void
     {
         $result = $this->imageGalleryHttpService->getGalleries(
             page: $this->current_page,
@@ -79,7 +81,7 @@ class GalleryList extends Component
         $this->pagination =$data_array['pagination'];
     }
 
-    public function deleteGallery($gallery_id)
+    public function deleteGallery(string $gallery_id): void
     {
         $result = $this->imageGalleryHttpService->deleteGallery($gallery_id);
 
@@ -91,7 +93,7 @@ class GalleryList extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.galleries.gallery-list');
     }

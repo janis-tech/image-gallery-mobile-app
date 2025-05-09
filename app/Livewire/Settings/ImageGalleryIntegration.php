@@ -9,11 +9,11 @@ use Livewire\Component;
 class ImageGalleryIntegration extends Component
 {
     #[Validate('nullable|string|size:120')]
-    public $image_gallery_entity_id = '';
+    public string $image_gallery_entity_id = '';
 
-    public $is_editing = false;
+    public bool $is_editing = false;
 
-    public $validation_error = null;
+    public ?string $validation_error = null;
 
     public function mount(): void
     {
@@ -45,7 +45,7 @@ class ImageGalleryIntegration extends Component
         $this->resetValidation();
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.settings.image-gallery-integration');
     }

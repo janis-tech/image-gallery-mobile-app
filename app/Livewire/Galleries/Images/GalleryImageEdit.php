@@ -10,26 +10,33 @@ class GalleryImageEdit extends Component
 {
     public string $gallery_id = '';
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $gallery;
+
+    /**
+     * @var array<string, mixed>
+     */
     public array $image = [];
 
     #[Validate('string|max:255')]
-    public $title = '';
+    public string $title = '';
 
     #[Validate('string|max:255')]
-    public $alt_text = '';
+    public string $alt_text = '';
 
     #[Validate('string|max:10000')]
-    public $description = '';
+    public string $description = '';
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount($gallery_id, $id)
+    public function mount(string $gallery_id, string $id): void
     {
         $this->gallery_id = $gallery_id;
         $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
@@ -37,7 +44,7 @@ class GalleryImageEdit extends Component
         $this->loadImage($id);
     }
 
-    private function loadImage($image_id)
+    private function loadImage(string $image_id): void
     {
         try {
             $image_dto = $this->imageGalleryHttpService->getGalleryImage($this->gallery_id, $image_id);
@@ -59,7 +66,7 @@ class GalleryImageEdit extends Component
         }
     }
 
-    public function updateImage()
+    public function updateImage(): void
     {
         $this->validate();
 
@@ -100,7 +107,7 @@ class GalleryImageEdit extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.images.gallery-image-edit');
     }

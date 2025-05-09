@@ -10,10 +10,19 @@ class GalleryShow extends Component
 {
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
+    /**
+     * @var array<string, string>
+     */
     public array $gallery;
 
+    /**
+     * @var array<array<string, mixed>>
+     */
     public array $images = [];
 
+    /**
+     * @var array<mixed>
+     */
     public array $pagination;
 
     public string $gallery_id = '';
@@ -24,17 +33,20 @@ class GalleryShow extends Component
 
     public int $current_page = 1;
 
-    protected $query_string = [
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $query_string = [
         'search' => ['except' => ''],
         'current_page' => ['except' => 1, 'as' => 'page'],
     ];
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount($id)
+    public function mount(string $id): void
     {
         $this->gallery_id = $id;
         $dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
@@ -42,12 +54,12 @@ class GalleryShow extends Component
         $this->refreshImages();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.galleries.gallery-show');
     }
 
-    public function refreshImages()
+    public function refreshImages(): void
     {
         $result = $this->imageGalleryHttpService->getGalleryImages(
             $this->gallery_id,
@@ -63,7 +75,7 @@ class GalleryShow extends Component
     }
 
     #[On('pageChange')]
-    public function handlePageChange($page, $page_name = 'page')
+    public function handlePageChange(int $page, string $page_name = 'page'): void
     {
         if ($page_name === 'page') {
             $this->current_page = $page;
@@ -71,7 +83,7 @@ class GalleryShow extends Component
         }
     }
 
-    public function updated($attribute)
+    public function updated(string $attribute): void
     {
         if ($attribute === 'search') {
             $this->resetPage();
@@ -79,12 +91,12 @@ class GalleryShow extends Component
         }
     }
 
-    public function resetPage()
+    public function resetPage(): void
     {
         $this->current_page = 1;
     }
 
-    public function deleteImage($image_id)
+    public function deleteImage(string $image_id): void
     {
         $result = $this->imageGalleryHttpService->deleteGalleryImage($this->gallery_id, $image_id);
 
@@ -97,7 +109,7 @@ class GalleryShow extends Component
         $this->refreshImages();
     }
 
-    public function uploadImages()
+    public function uploadImages(): void
     {
         // Implementation will be added later
     }
