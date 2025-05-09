@@ -44,7 +44,7 @@ class GalleryEdit extends Component
             }
 
             $this->name = $this->gallery['name'];
-            $this->description = $this->gallery->description ?? '';
+            $this->description = $this->gallery['description'];
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 

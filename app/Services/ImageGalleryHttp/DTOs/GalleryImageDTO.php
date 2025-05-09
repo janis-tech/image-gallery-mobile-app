@@ -49,7 +49,6 @@ class GalleryImageDTO extends AbstractDTO
      * Create a new GalleryImageDTO instance from an array.
      *
      * @param array<string, mixed> $data The image data
-     * @return self
      */
     public static function fromArray(array $data): static
     {

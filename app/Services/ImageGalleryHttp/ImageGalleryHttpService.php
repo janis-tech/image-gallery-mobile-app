@@ -353,11 +353,11 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
-            $imageDTO = isset($data['data']) ? GalleryImageDTO::fromArray($data['data']) : null;
+            $image_dto = isset($data['data']) ? GalleryImageDTO::fromArray($data['data']) : null;
 
             return [
                 'success' => true,
-                'data' => $imageDTO,
+                'data' => $image_dto,
             ];
 
         } catch (RequestException $e) {

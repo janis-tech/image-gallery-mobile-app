@@ -33,7 +33,7 @@ class GalleryDTO extends AbstractDTO
      */
     public static function fromArray(array $data): static
     {
-        return new static(
+        return new self(
             id: $data['id'] ?? '',
             name: $data['name'] ?? '',
             description: $data['description'] ?? null,

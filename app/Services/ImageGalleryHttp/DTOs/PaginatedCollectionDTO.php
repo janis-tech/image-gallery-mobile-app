@@ -19,16 +19,16 @@ class PaginatedCollectionDTO extends AbstractDTO
      * Create a new PaginatedCollectionDTO instance from an array.
      *
      * @param array<string, mixed> $data The collection data
-     * @param string $itemType The type of items in the collection
+     * @param string $item_type The type of items in the collection
      * @return static
      */
-    public static function fromArray(array $data, string $itemType = ''): static
+    public static function fromArray(array $data, string $item_type = ''): static
     {
         $items = [];
         
-        if ($itemType && method_exists($itemType, 'fromArray')) {
+        if ($item_type && method_exists($item_type, 'fromArray')) {
             foreach ($data['data'] ?? [] as $item) {
-                $items[] = $itemType::fromArray($item);
+                $items[] = $item_type::fromArray($item);
             }
         } else {
             $items = $data['data'] ?? [];

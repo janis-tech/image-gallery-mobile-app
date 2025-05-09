@@ -2,6 +2,9 @@
 
 namespace App\Services\ImageGalleryHttp\DTOs;
 
+/**
+ * Abstract Data Transfer Object base class.
+ */
 abstract class AbstractDTO
 {
     /**
@@ -12,7 +15,10 @@ abstract class AbstractDTO
      */
     public static function fromArray(array $data): static
     {
-        return new static(...$data);
+        throw new \LogicException(sprintf(
+            'Class %s must implement its own fromArray() method',
+            static::class
+        ));
     }
 
     /**

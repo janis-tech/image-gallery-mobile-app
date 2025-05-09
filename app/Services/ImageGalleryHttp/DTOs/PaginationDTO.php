@@ -31,7 +31,7 @@ class PaginationDTO extends AbstractDTO
      */
     public static function fromArray(array $data): static
     {
-        return new static(
+        return new self(
             total: $data['total'] ?? 0,
             per_page: $data['per_page'] ?? 15,
             current_page: $data['current_page'] ?? 1,

@@ -47,7 +47,7 @@ class GalleryList extends Component
         if ($attribute == 'search') {
             $this->resetPage();
         }
-        if (in_array($attribute, ['search'])) {
+        if (in_array($attribute, ['search'], true)) {
             $this->refreshGalleries();
         }
     }
