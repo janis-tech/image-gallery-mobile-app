@@ -2,7 +2,7 @@
 
 namespace App\Services\ImageGalleryHttp\DTOs;
 
-class PaginatedCollectionDTO extends AbstractDTO
+class PaginatedCollectionDTO
 {
     /**
      * Create a new PaginatedCollectionDTO instance.
@@ -20,9 +20,9 @@ class PaginatedCollectionDTO extends AbstractDTO
      *
      * @param array<string, mixed> $data The collection data
      * @param string $item_type The type of items in the collection
-     * @return static
+     * @return self
      */
-    public static function fromArray(array $data, string $item_type = ''): static
+    public static function fromArray(array $data, string $item_type = ''): self
     {
         $items = [];
         

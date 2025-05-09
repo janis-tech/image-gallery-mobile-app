@@ -2,7 +2,7 @@
 
 namespace App\Services\ImageGalleryHttp\DTOs;
 
-class GalleryDTO extends AbstractDTO
+class GalleryDTO
 {
     /**
      * Create a new GalleryDTO instance.
@@ -29,9 +29,9 @@ class GalleryDTO extends AbstractDTO
      * Create a new GalleryDTO instance from an array.
      *
      * @param array<string, mixed> $data The gallery data
-     * @return static
+     * @return self
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         return new self(
             id: $data['id'] ?? '',

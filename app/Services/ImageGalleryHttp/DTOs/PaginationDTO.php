@@ -2,7 +2,7 @@
 
 namespace App\Services\ImageGalleryHttp\DTOs;
 
-class PaginationDTO extends AbstractDTO
+class PaginationDTO
 {
     /**
      * Create a new PaginationDTO instance.
@@ -27,9 +27,9 @@ class PaginationDTO extends AbstractDTO
      * Create a new PaginationDTO instance from an array.
      *
      * @param array<string, mixed> $data The pagination data
-     * @return static
+     * @return self
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         return new self(
             total: $data['total'] ?? 0,
