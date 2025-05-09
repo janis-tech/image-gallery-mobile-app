@@ -10,11 +10,11 @@ class GalleryShow extends Component
 {
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public array $gallery = [];
+    public array $gallery;
 
     public array $images = [];
 
-    public array $pagination = [];
+    public array $pagination;
 
     public string $gallery_id = '';
 
@@ -37,7 +37,8 @@ class GalleryShow extends Component
     public function mount($id)
     {
         $this->gallery_id = $id;
-        $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+        $dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+        $this->gallery = $dto->toArray();
         $this->refreshImages();
     }
 
@@ -55,8 +56,10 @@ class GalleryShow extends Component
             $this->current_page
         );
 
-        $this->images = $result['data'] ?? [];
-        $this->pagination = $result['pagination'] ?? [];
+        $result_array = $result->toArray();
+
+        $this->images = $result_array['data'] ?? [];
+        $this->pagination = $result_array['pagination'];
     }
 
     #[On('pageChange')]

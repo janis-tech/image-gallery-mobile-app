@@ -2,11 +2,15 @@
 
 namespace App\Livewire\Components;
 
+use App\Services\ImageGalleryHttp\DTOs\PaginationDTO;
 use Livewire\Component;
 
 class ArrayPagination extends Component
 {
-    public array $pagination = [];
+    /**
+     * @var array|PaginationDTO
+     */
+    public $pagination = [];
 
     public int $current_page = 1;
 
@@ -36,7 +40,7 @@ class ArrayPagination extends Component
 
     public function nextPage()
     {
-        if ($this->current_page < ($this->pagination['last_page'] ?? 1)) {
+        if ($this->current_page < $this->getLastPage()) {
             $this->dispatch('pageChange',
                 page: $this->current_page + 1,
                 page_name: $this->page_name
@@ -46,12 +50,26 @@ class ArrayPagination extends Component
 
     public function goToPage($page)
     {
-        if ($page >= 1 && $page <= ($this->pagination['last_page'] ?? 1) && $page != $this->current_page) {
+        if ($page >= 1 && $page <= $this->getLastPage() && $page != $this->current_page) {
             $this->dispatch('pageChange',
                 page: $page,
                 page_name: $this->page_name
             );
         }
+    }
+
+    /**
+     * Get the last page number regardless of pagination type
+     * 
+     * @return int
+     */
+    private function getLastPage(): int
+    {
+        if ($this->pagination instanceof PaginationDTO) {
+            return $this->pagination->last_page;
+        }
+        
+        return $this->pagination['last_page'] ?? 1;
     }
 
     public function render()

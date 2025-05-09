@@ -8,14 +8,14 @@
                     ['label' => 'Home', 'url' => route('dashboard')],
                     ['label' => 'Galleries', 'url' => route('galleries.list')],
                     ['label' => $gallery['name'] ?? 'Gallery', 'url' => route('galleries.show', $gallery['id'])],
-                    ['label' => $image['title'] ?? $image['original_filename']],
+                    ['label' => str()->words($image['title'] ?? $image['generated_caption'], 15)],
                 ]" />
             </div>
             
             <!-- Top action buttons -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold dark:text-white">
-                    {{ $image['title'] ?? $image['original_filename'] }}
+                    {{ str()->words($image['title'] ?? $image['generated_caption'], 15) }}
                 </h1>
                 <div class="flex items-center space-x-3">
                     <a href="{{ route('galleries.image.edit', [$gallery['id'], $image['id']]) }}" class="px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md flex items-center transition-colors">
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Original Filename</span>
-                                    <span class="dark:text-gray-300">{{ $image['original_filename'] }}</span>
+                                    <span class="dark:text-gray-300">{{ str()->limit($image['original_filename'], 30) }}</span>
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-sm font-medium text-gray-600 dark:text-gray-400">File Type</span>

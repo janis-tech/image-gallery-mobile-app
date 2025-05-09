@@ -10,11 +10,10 @@ class GalleryImageEdit extends Component
 {
     public string $gallery_id = '';
 
-    public ?array $image = null;
+    public array $gallery;
+    public array $image = [];
 
-    public array $gallery = [];
-
-    #[Validate('required|string|max:255')]
+    #[Validate('string|max:255')]
     public $title = '';
 
     #[Validate('string|max:255')]
@@ -28,19 +27,21 @@ class GalleryImageEdit extends Component
     public function boot()
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
-        $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
     }
 
     public function mount($gallery_id, $id)
     {
         $this->gallery_id = $gallery_id;
+        $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+        $this->gallery = $gallery_dto->toArray();
         $this->loadImage($id);
     }
 
     private function loadImage($image_id)
     {
         try {
-            $this->image = $this->imageGalleryHttpService->getGalleryImage($this->gallery_id, $image_id);
+            $image_dto = $this->imageGalleryHttpService->getGalleryImage($this->gallery_id, $image_id);
+            $this->image = $image_dto->toArray();
 
             if (! $this->image) {
                 session()->flash('error', 'Image not found.');
@@ -48,9 +49,9 @@ class GalleryImageEdit extends Component
                 $this->redirect(route('galleries.show', $this->gallery_id), navigate: true);
             }
 
-            $this->title = $this->image['title'] ?? '';
-            $this->alt_text = $this->image['alt_text'] ?? '';
-            $this->description = $this->image['description'] ?? '';
+            $this->title = $this->image['title'] ;
+            $this->alt_text = $this->image['alt_text'];
+            $this->description = $this->image['description'];
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load image. Please try again later.');
 

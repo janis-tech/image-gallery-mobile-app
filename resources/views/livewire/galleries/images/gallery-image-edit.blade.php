@@ -5,7 +5,7 @@
             ['label' => 'Home', 'url' => route('dashboard')],
             ['label' => 'Galleries', 'url' => route('galleries.list')],
             ['label' => $gallery['name'] ?? 'Gallery', 'url' => route('galleries.show', $gallery['id'])],
-            ['label' => ($image['title'] ?? $image['original_filename']) ?? 'Image', 'url' => route('galleries.image.show', [$gallery['id'], $image['id']])],
+            ['label' => (str()->words($image['title'] ?? $image['generated_caption'], 15)) ?? 'Image', 'url' => route('galleries.image.show', [$gallery['id'], $image['id']])],
             ['label' => 'Edit'],
         ]" />
     </div>
@@ -22,16 +22,10 @@
             <div class="bg-white dark:bg-[#161615] rounded-lg shadow-md p-6 border border-gray-200 dark:border-[#3E3E3A]">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Image Preview</h2>
                 <div class="relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-4">
-                    @if(isset($image['presets']['medium']))
+                    @if(isset($image['presets']['large']))
                         <img 
-                            src="{{ $image['presets']['medium'] }}" 
-                            alt="{{ $image['title'] ?? $image['original_filename'] }}" 
-                            class="w-full h-full object-contain"
-                        >
-                    @elseif(isset($image['file_url']))
-                        <img 
-                            src="{{ $image['file_url'] }}" 
-                            alt="{{ $image['title'] ?? $image['original_filename'] }}" 
+                            src="{{ $image['presets']['large'] }}" 
+                            alt="{{ str()->limit($image['original_filename'], 30) }}" 
                             class="w-full h-full object-contain"
                         >
                     @else
@@ -42,7 +36,7 @@
                 </div>
                 
                 <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                    <p>Original Filename: <span class="font-medium">{{ $image['original_filename'] ?? 'Unknown' }}</span></p>
+                    <p>Original Filename: <span class="font-medium">{{ str()->limit($image['original_filename'], 30) }}</span></p>
                     @if(isset($image['width']) && isset($image['height']))
                         <p>Dimensions: <span class="font-medium">{{ $image['width'] }} × {{ $image['height'] }}</span></p>
                     @endif

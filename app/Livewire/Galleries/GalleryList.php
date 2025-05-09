@@ -8,8 +8,15 @@ use Livewire\Component;
 
 class GalleryList extends Component
 {
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     public array $galleries = [];
 
+
+    /**
+     * The array representation of pagination data for Livewire compatibility
+     */
     public array $pagination = [];
 
     public int $current_page = 1;
@@ -67,8 +74,9 @@ class GalleryList extends Component
             search: $this->search
         );
 
-        $this->galleries = $result['data'] ?? [];
-        $this->pagination = $result['pagination'] ?? [];
+        $data_array = $result->toArray();
+        $this->galleries = $data_array['data'];
+        $this->pagination =$data_array['pagination'];
     }
 
     public function deleteGallery($gallery_id)

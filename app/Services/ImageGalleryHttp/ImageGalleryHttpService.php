@@ -2,6 +2,10 @@
 
 namespace App\Services\ImageGalleryHttp;
 
+use App\Services\ImageGalleryHttp\DTOs\GalleryDTO;
+use App\Services\ImageGalleryHttp\DTOs\GalleryImageDTO;
+use App\Services\ImageGalleryHttp\DTOs\PaginatedCollectionDTO;
+use App\Services\ImageGalleryHttp\DTOs\PaginationDTO;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -29,7 +33,6 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
      */
     public function setEntityId(?string $entity_id): void
     {
-
         if ($entity_id === null) {
             throw new InvalidArgumentException('Entity ID cannot be null');
         }
@@ -54,7 +57,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         ]);
     }
 
-    public function getGalleries(?int $page, ?int $per_page, ?string $search): array
+    public function getGalleries(?int $page, ?int $per_page, ?string $search): PaginatedCollectionDTO
     {
         $query_params = array_filter([
             'page' => $page,
@@ -68,32 +71,43 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $response_data = json_decode($response->getBody()->getContents(), true);
-
-            return [
-                'data' => $response_data['data'] ?? [],
-                'pagination' => [
-                    'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
-                    'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 15,
-                    'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
-                    'last_page' => $response_data['meta']['last_page'] ?? 1,
-                    'from' => $response_data['meta']['from'] ?? 1,
-                    'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
-                ],
+            
+            $pagination = [
+                'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
+                'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 15,
+                'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
+                'last_page' => $response_data['meta']['last_page'] ?? 1,
+                'from' => $response_data['meta']['from'] ?? 1,
+                'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
             ];
+
+            $galleries = [];
+            foreach ($response_data['data'] ?? [] as $gallery) {
+                $galleries[] = GalleryDTO::fromArray($gallery);
+            }
+
+            return new PaginatedCollectionDTO(
+                $galleries,
+                PaginationDTO::fromArray($pagination)
+            );
 
         } catch (GuzzleException $e) {
             throw new \Exception('Error fetching galleries: '.$e->getMessage());
         }
     }
 
-    public function getGallery(string $id): ?array
+    public function getGallery(string $id): ?GalleryDTO
     {
         try {
             $response = $this->client->request('GET', 'galleries/'.$id);
 
             $data = json_decode($response->getBody()->getContents(), true);
 
-            return $data['data'] ?? null;
+            if (isset($data['data'])) {
+                return GalleryDTO::fromArray($data['data']);
+            }
+
+            return null;
 
         } catch (GuzzleException $e) {
             if ($e->getCode() === 404) {
@@ -192,7 +206,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
         }
     }
 
-    public function getGalleryImages(string $id, ?string $search = null, ?int $per_page = null, ?int $page = null): array
+    public function getGalleryImages(string $id, ?string $search = null, ?int $per_page = null, ?int $page = null): PaginatedCollectionDTO
     {
         try {
             $query_params = [];
@@ -214,32 +228,39 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $response_data = json_decode($response->getBody()->getContents(), true);
-
-            return [
-                'data' => $response_data['data'] ?? [],
-                'pagination' => [
-                    'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
-                    'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 12,
-                    'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
-                    'last_page' => $response_data['meta']['last_page'] ?? 1,
-                    'from' => $response_data['meta']['from'] ?? 1,
-                    'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
-                ],
+            
+            $pagination = [
+                'total' => $response_data['meta']['total'] ?? count($response_data['data'] ?? []),
+                'per_page' => $response_data['meta']['per_page'] ?? $per_page ?? 12,
+                'current_page' => $response_data['meta']['current_page'] ?? $page ?? 1,
+                'last_page' => $response_data['meta']['last_page'] ?? 1,
+                'from' => $response_data['meta']['from'] ?? 1,
+                'to' => $response_data['meta']['to'] ?? count($response_data['data'] ?? []),
             ];
+
+            $images = [];
+            foreach ($response_data['data'] ?? [] as $image) {
+                $images[] = GalleryImageDTO::fromArray($image);
+            }
+
+            return new PaginatedCollectionDTO(
+                $images,
+                PaginationDTO::fromArray($pagination)
+            );
 
         } catch (GuzzleException $e) {
             throw new \Exception('Error fetching gallery images: '.$e->getMessage());
         }
     }
 
-    public function getGalleryImage(string $gallery_id, string $image_id): array
+    public function getGalleryImage(string $gallery_id, string $image_id): GalleryImageDTO
     {
         try {
             $response = $this->client->request('GET', 'galleries/'.$gallery_id.'/images/'.$image_id);
 
             $data = json_decode($response->getBody()->getContents(), true);
 
-            return $data['data'] ?? [];
+            return GalleryImageDTO::fromArray($data['data'] ?? []);
 
         } catch (GuzzleException $e) {
             throw new \Exception('Error fetching image: '.$e->getMessage());
@@ -332,10 +353,11 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
+            $imageDTO = isset($data['data']) ? GalleryImageDTO::fromArray($data['data']) : null;
 
             return [
                 'success' => true,
-                'data' => $data['data'] ?? [],
+                'data' => $imageDTO,
             ];
 
         } catch (RequestException $e) {

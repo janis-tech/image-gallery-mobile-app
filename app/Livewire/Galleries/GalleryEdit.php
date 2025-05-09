@@ -33,9 +33,9 @@ class GalleryEdit extends Component
 
     public function loadGallery()
     {
-
         try {
-            $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+            $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+            $this->gallery = $gallery_dto->toArray();
 
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
@@ -44,7 +44,7 @@ class GalleryEdit extends Component
             }
 
             $this->name = $this->gallery['name'];
-            $this->description = $this->gallery['description'] ?? '';
+            $this->description = $this->gallery->description ?? '';
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to load gallery. Please try again later.');
 
@@ -54,13 +54,9 @@ class GalleryEdit extends Component
 
     public function updateGallery()
     {
-
         $this->validate();
 
         try {
-
-            $this->validate();
-
             $result = $this->imageGalleryHttpService->updateGallery(
                 id: $this->gallery_id,
                 name: $this->name,

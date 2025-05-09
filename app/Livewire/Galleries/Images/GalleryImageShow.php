@@ -2,23 +2,25 @@
 
 namespace App\Livewire\Galleries\Images;
 
+use App\Services\ImageGalleryHttp\DTOs\GalleryDTO;
+use App\Services\ImageGalleryHttp\DTOs\GalleryImageDTO;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class GalleryImageShow extends Component
 {
-    public $image = null;
+    public array $image;
 
-    public $show_gallery_view = false;
+    public bool $show_gallery_view = false;
 
-    public $current_gallery_index = 0;
+    public int $current_gallery_index = 0;
 
-    public $gallery_images = [];
+    public array $gallery_images = [];
 
-    public $current_url_copied = false;
+    public bool $current_url_copied = false;
 
-    public array $gallery = [];
+    public $gallery = null;
 
     private ImageGalleryHttpServiceInterface $image_gallery_http_service;
 
@@ -29,8 +31,10 @@ class GalleryImageShow extends Component
 
     public function mount($gallery_id, $id)
     {
-        $this->image = $this->image_gallery_http_service->getGalleryImage($gallery_id, $id);
-        $this->gallery = $this->image_gallery_http_service->getGallery($gallery_id);
+        $image_dto = $this->image_gallery_http_service->getGalleryImage($gallery_id, $id);
+        $gallery_dto = $this->image_gallery_http_service->getGallery($gallery_id);
+        $this->image = $image_dto->toArray();
+        $this->gallery = $gallery_dto->toArray();
     }
 
     #[On('show-image')]
@@ -112,9 +116,8 @@ class GalleryImageShow extends Component
 
     public function deleteImage()
     {
-        if (! $this->image || ! isset($this->image['id'])) {
+        if (!$this->image || !$this->gallery) {
             session()->flash('error', 'No image selected for deletion.');
-
             return;
         }
 
@@ -125,7 +128,6 @@ class GalleryImageShow extends Component
 
         if ($result) {
             session()->flash('message', 'Image deleted successfully!');
-
             return $this->redirect(route('galleries.show', $this->gallery['id']), navigate: true);
         } else {
             session()->flash('error', 'Failed to delete image. Please try again.');

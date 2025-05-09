@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Galleries\Images;
 
+use App\Services\ImageGalleryHttp\DTOs\GalleryDTO;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
@@ -22,7 +23,7 @@ class GalleryImageUpload extends Component
 
     public string $temp_file_path = '';
 
-    public ?array $gallery = [];
+    public array $gallery;
 
     public string $title = '';
 
@@ -45,7 +46,9 @@ class GalleryImageUpload extends Component
     {
         $this->gallery_id = $gallery_id;
         try {
-            $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+            $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+            $this->gallery = $gallery_dto->toArray();
+            
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
