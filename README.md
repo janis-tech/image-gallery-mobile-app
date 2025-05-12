@@ -14,6 +14,16 @@ This project serves as an example implementation of a mobile app that connects t
   - Automatic image captioning 
   - Semantic search using AI embeddings
 
+## Demo Gallery
+
+To quickly test the application with pre-populated images, you can use the following demo entity ID:
+
+```
+xFQZBcKqvCIENLvWmbz5esgKzl2XZtGR21TIM3nEPlI0RzhcJtcHS73coooX5ujOxwUOA3ltYPQXsuQDhPHjaY0JyF6mm6bETa7UU1UqzG2b74JSDvg5sj1y
+```
+
+Navigate to `Settings > Image Gallery Integration` in the application and paste this entity ID to connect to the demo gallery.
+
 ## Todo
 
 - Implement automated tests with 80% threshold in code coverage
