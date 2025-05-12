@@ -16,7 +16,7 @@ class GalleryEdit extends Component
      */
     public ?array $gallery;
 
-    #[Validate('required|string|max:255')]
+    #[Validate('string|max:255')]
     public string $name = '';
 
     #[Validate('string|max:255')]
@@ -39,12 +39,21 @@ class GalleryEdit extends Component
     {
         try {
             $gallery_dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+
+            if ($gallery_dto === null) {
+                session()->flash('error', 'Gallery not found.');
+
+                $this->redirect(route('galleries.list'), navigate: true);
+                return;
+            }
+
             $this->gallery = $gallery_dto->toArray();
 
             if (! $this->gallery) {
                 session()->flash('error', 'Gallery not found.');
 
                 $this->redirect(route('galleries.list'), navigate: true);
+                return;
             }
 
             $this->name = $this->gallery['name'];
@@ -67,7 +76,7 @@ class GalleryEdit extends Component
                 description: $this->description ?? ''
             );
 
-            if ($result['success']) {
+            if ($result['success'] === true) {
                 session()->flash('message', 'Gallery updated successfully!');
 
                 $this->redirect(route('galleries.list'), navigate: true);

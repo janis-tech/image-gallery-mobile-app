@@ -15,7 +15,7 @@ use Exception;
 
 class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 {
-    public const BASE_URL = 'https://demo.janis-tech.dev/api/v1/';
+    private string $base_url;
 
     private Client $client;
 
@@ -23,7 +23,12 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
     public function __construct(?string $entity_id)
     {
+        if ($entity_id === null) {
+            throw new InvalidArgumentException('Entity ID cannot be null');
+        }
+
         $this->entity_id = $entity_id;
+        $this->base_url = config('services.image_gallery.base_url');
         $this->initClient();
     }
 
@@ -77,6 +82,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             );
 
         } catch (GuzzleException $e) {
+            // dd($e);
             throw new Exception('Error fetching galleries: '.$e->getMessage());
         }
     }
@@ -415,7 +421,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
     private function initClient(): void
     {
         $this->client = new Client([
-            'base_uri' => self::BASE_URL,
+            'base_uri' => $this->base_url,
             'timeout' => 30.0,
             'headers' => [
                 'Content-Type' => 'application/json',
