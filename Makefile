@@ -34,6 +34,9 @@ test-workflow:
 test:
 	php artisan test --parallel --coverage --min=80
 
+build-android:
+	php artisan native:run android
+
 # Display help information
 help:
 	@echo ""
@@ -46,4 +49,5 @@ help:
 	@echo "make help      - Display this help information"
 	@echo "make test-workflow - Run the GitHub Actions workflow locally"
 	@echo "make test      - Run the tests"
+	@echo "make build-android   - Build the Android app"
 	@echo ""

@@ -8,67 +8,82 @@ use Livewire\Component;
 
 class GalleryShow extends Component
 {
-    private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
+    /**
+     * @var array<string, string>
+     */
+    public array $gallery;
 
-    public array $gallery = [];
-
+    /**
+     * @var array<array<string, mixed>>
+     */
     public array $images = [];
 
-    public array $pagination = [];
+    /**
+     * @var array<mixed>
+     */
+    public array $pagination;
 
     public string $gallery_id = '';
 
     public string $search = '';
 
-    public int $perPage = 12;
+    public int $per_page = 12;
 
-    public int $currentPage = 1;
+    public int $current_page = 1;
 
-    protected $queryString = [
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $query_string = [
         'search' => ['except' => ''],
-        'currentPage' => ['except' => 1, 'as' => 'page'],
+        'current_page' => ['except' => 1, 'as' => 'page'],
     ];
 
-    public function boot()
+    private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
+
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function mount($id)
+    public function mount(string $id): void
     {
         $this->gallery_id = $id;
-        $this->gallery = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+        $dto = $this->imageGalleryHttpService->getGallery($this->gallery_id);
+        $this->gallery = $dto->toArray();
         $this->refreshImages();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.galleries.gallery-show');
     }
 
-    public function refreshImages()
+    public function refreshImages(): void
     {
         $result = $this->imageGalleryHttpService->getGalleryImages(
             $this->gallery_id,
             $this->search,
-            $this->perPage,
-            $this->currentPage
+            $this->per_page,
+            $this->current_page
         );
 
-        $this->images = $result['data'] ?? [];
-        $this->pagination = $result['pagination'] ?? [];
+        $result_array = $result->toArray();
+
+        $this->images = $result_array['data'] ?? [];
+        $this->pagination = $result_array['pagination'];
     }
 
     #[On('pageChange')]
-    public function handlePageChange($page, $pageName = 'page')
+    public function handlePageChange(int $page, string $page_name = 'page'): void
     {
-        if ($pageName === 'page') {
-            $this->currentPage = $page;
+        if ($page_name === 'page') {
+            $this->current_page = $page;
             $this->refreshImages();
         }
     }
 
-    public function updated($attribute)
+    public function updated(string $attribute): void
     {
         if ($attribute === 'search') {
             $this->resetPage();
@@ -76,12 +91,12 @@ class GalleryShow extends Component
         }
     }
 
-    public function resetPage()
+    public function resetPage(): void
     {
-        $this->currentPage = 1;
+        $this->current_page = 1;
     }
 
-    public function deleteImage($image_id)
+    public function deleteImage(string $image_id): void
     {
         $result = $this->imageGalleryHttpService->deleteGalleryImage($this->gallery_id, $image_id);
 
@@ -94,7 +109,7 @@ class GalleryShow extends Component
         $this->refreshImages();
     }
 
-    public function uploadImages()
+    public function uploadImages(): void
     {
         // Implementation will be added later
     }

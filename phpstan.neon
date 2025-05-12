@@ -1,0 +1,33 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+    - vendor/spaze/phpstan-disallowed-calls/extension.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
+
+parameters:
+    paths:
+        - app/
+        - database/
+        - routes/
+
+    # Level 10 is the highest level
+    level: 6
+    
+    bootstrapFiles:
+        - vendor/autoload.php
+    
+    scanDirectories:
+        - phpstan-rules/src
+
+services:
+    -
+        class: App\PHPStan\Rules\SnakeCaseVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: App\PHPStan\Rules\CamelCaseMethodRule
+        tags:
+            - phpstan.rules.rule

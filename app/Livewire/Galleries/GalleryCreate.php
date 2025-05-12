@@ -5,23 +5,24 @@ namespace App\Livewire\Galleries;
 use App\Services\ImageGalleryHttp\ImageGalleryHttpServiceInterface;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Exception;
 
 class GalleryCreate extends Component
 {
     #[Validate('required|string|max:255')]
-    public $name = '';
+    public string $name = '';
 
     #[Validate('string|max:10000')]
-    public $description = '';
+    public string $description = '';
 
     private ImageGalleryHttpServiceInterface $imageGalleryHttpService;
 
-    public function boot()
+    public function boot(): void
     {
         $this->imageGalleryHttpService = app(ImageGalleryHttpServiceInterface::class);
     }
 
-    public function createGallery()
+    public function createGallery(): void
     {
         $this->validate();
 
@@ -35,26 +36,26 @@ class GalleryCreate extends Component
             if ($result['success']) {
                 session()->flash('message', 'Gallery created successfully!');
 
-                return $this->redirect(route('galleries.list'), navigate: true);
+                $this->redirect(route('galleries.list'), navigate: true);
             }
 
-            if (isset($result['errors']) && ! empty($result['errors'])) {
+            if (! empty($result['errors'])) {
                 foreach ($result['errors'] as $field => $messages) {
                     foreach ((array) $messages as $message) {
                         $this->addError($field, $message);
                     }
                 }
             } else {
-                session()->flash('error', $result['message'] ?? 'Failed to create gallery. Please try again.');
+                session()->flash('error', $result['message']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'An unexpected error occurred. Please try again later.');
 
-            return $this->redirect(route('galleries.list'), navigate: true);
+            $this->redirect(route('galleries.list'), navigate: true);
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.galleries.gallery-create');
     }

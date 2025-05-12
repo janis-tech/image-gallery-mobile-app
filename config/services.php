@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'image_gallery' => [
+        'base_url' => env('IMAGE_GALLERY_BASE_URL')
+    ]
+
 ];

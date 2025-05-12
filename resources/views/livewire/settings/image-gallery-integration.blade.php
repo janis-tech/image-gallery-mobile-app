@@ -44,7 +44,7 @@
                         
                         <button
                             type="button"
-                            x-show="!@js($is_editing) && '@js($image_gallery_entity_id)'"
+                            x-show="!@js($is_editing) && @js((bool)$image_gallery_entity_id)"
                             @click="copyToClipboard"
                             class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium focus:outline-none flex items-center"
                         >

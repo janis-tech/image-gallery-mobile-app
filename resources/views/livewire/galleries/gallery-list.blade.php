@@ -102,8 +102,8 @@
     <div class="mt-8">
         <livewire:components.array-pagination 
             :pagination="$pagination" 
-            :currentPage="$currentPage" 
-            :key="'gallery-list-pagination-'.$currentPage" />
+            :current_page="$current_page" 
+            :key="'gallery-list-pagination-'.$current_page" />
     </div>
     
     <a href="{{ route('galleries.create') }}" wire:navigate

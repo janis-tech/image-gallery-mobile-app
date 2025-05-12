@@ -2,6 +2,10 @@
 
 namespace App\Services\ImageGalleryHttp;
 
+use App\Services\ImageGalleryHttp\DTOs\GalleryDTO;
+use App\Services\ImageGalleryHttp\DTOs\GalleryImageDTO;
+use App\Services\ImageGalleryHttp\DTOs\PaginatedCollectionDTO;
+
 interface ImageGalleryHttpServiceInterface
 {
     /**
@@ -17,24 +21,24 @@ interface ImageGalleryHttpServiceInterface
      * @param  int|null  $page  The page number for pagination.
      * @param  int|null  $per_page  The number of items per page.
      * @param  string|null  $search  The search term to filter galleries.
-     * @return array<mixed> An array of galleries.
+     * @return PaginatedCollectionDTO A collection of galleries with pagination.
      */
-    public function getGalleries(?int $page, ?int $per_page, ?string $search): array;
+    public function getGalleries(?int $page, ?int $per_page, ?string $search): PaginatedCollectionDTO;
 
     /**
      * Get a specific gallery by its ID.
      *
      * @param  string  $id  The ID of the gallery to retrieve.
-     * @return array<string, mixed>|null The gallery data or null if not found.
+     * @return GalleryDTO|null The gallery data or null if not found.
      */
-    public function getGallery(string $id): ?array;
+    public function getGallery(string $id): ?GalleryDTO;
 
     /**
      * Create a new gallery.
      *
      * @param  string  $name  The name of the gallery.
      * @param  string  $description  The description of the gallery.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function createGallery(string $name, string $description): array;
 
@@ -44,7 +48,7 @@ interface ImageGalleryHttpServiceInterface
      * @param  string  $id  The ID of the gallery to update.
      * @param  string  $name  The updated name of the gallery.
      * @param  string  $description  The updated description of the gallery.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function updateGallery(string $id, string $name, string $description): array;
 
@@ -61,20 +65,20 @@ interface ImageGalleryHttpServiceInterface
      *
      * @param  string  $id  The ID of the gallery to fetch images from.
      * @param  ?string  $search  The search term to filter images.
-     * @param  ?int  $perPage  Number of items per page for pagination.
+     * @param  ?int  $per_page  Number of items per page for pagination.
      * @param  ?int  $page  Current page number for pagination.
-     * @return array{data: array, pagination: array} An array containing images data and pagination metadata.
+     * @return PaginatedCollectionDTO A collection of gallery images with pagination.
      */
-    public function getGalleryImages(string $id, ?string $search = null, ?int $perPage = null, ?int $page = null);
+    public function getGalleryImages(string $id, ?string $search = null, ?int $per_page = null, ?int $page = null): PaginatedCollectionDTO;
 
     /**
      * Fetch a specific image from a gallery.
      *
      * @param  string  $gallery_id  The ID of the gallery containing the image.
      * @param  string  $image_id  The ID of the image to fetch.
-     * @return array<string, mixed> An array containing the image data.
+     * @return GalleryImageDTO The image data.
      */
-    public function getGalleryImage(string $gallery_id, string $image_id): array;
+    public function getGalleryImage(string $gallery_id, string $image_id): GalleryImageDTO;
 
     /**
      * Update a gallery image.
@@ -84,7 +88,7 @@ interface ImageGalleryHttpServiceInterface
      * @param  string  $title  The new title for the image.
      * @param  string  $alt_text  The new alt text for the image.
      * @param  string  $description  The new description for the image.
-     * @return array{success: bool, errors?: array<string, array<string>>} Returns success status and any validation errors.
+     * @return array{success: bool, errors: array<string, array<string>>, message: string} Returns success status and any validation errors.
      */
     public function updateGalleryImage(string $gallery_id, string $image_id, string $title, string $alt_text, string $description): array;
 
@@ -97,7 +101,7 @@ interface ImageGalleryHttpServiceInterface
      * @param  ?string  $file_name  The file name for the image (optional).
      * @param  ?string  $description  The description for the image (optional).
      * @param  ?string  $alt_text  The alt text for the image (optional).
-     * @return array{success: bool, errors?: array<string, array<string>>, message?: string} Returns success status and any validation errors.
+     * @return array{success: bool, data?: GalleryImageDTO, errors?: array<string, array<string>>, message?: string} Returns success status and any validation errors.
      */
     public function uploadGalleryImage(string $gallery_id, string $file_path, ?string $title = null, ?string $file_name = null, ?string $description = null, ?string $alt_text = null): array;
 
