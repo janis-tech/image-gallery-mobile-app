@@ -8,14 +8,14 @@
                     ['label' => 'Home', 'url' => route('dashboard')],
                     ['label' => 'Galleries', 'url' => route('galleries.list')],
                     ['label' => $gallery['name'] ?? 'Gallery', 'url' => route('galleries.show', $gallery['id'])],
-                    ['label' => str()->words($image['title'] ?? $image['generated_caption'], 15)],
+                    ['label' => str()->words((!empty($image['title'])) ? $image['title'] : $image['generated_caption'], 15)],
                 ]" />
             </div>
             
             <!-- Page title (without buttons) -->
             <div class="mb-6">
                 <h1 class="text-2xl font-bold dark:text-white">
-                    {{ str()->words($image['title'] ?? $image['generated_caption'], 15) }}
+                    {{ str()->words((!empty($image['title'])) ? $image['title'] : $image['generated_caption'], 15) }}
                 </h1>
             </div>
             
