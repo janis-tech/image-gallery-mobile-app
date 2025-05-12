@@ -82,7 +82,6 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             );
 
         } catch (GuzzleException $e) {
-            // dd($e);
             throw new Exception('Error fetching galleries: '.$e->getMessage());
         }
     }
@@ -102,7 +101,7 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
 
         } catch (GuzzleException $e) {
             if ($e->getCode() === 404) {
-                return null;
+                abort(404);
             }
             throw new Exception('Error fetching gallery: '.$e->getMessage());
         }
@@ -260,6 +259,9 @@ class ImageGalleryHttpService implements ImageGalleryHttpServiceInterface
             return GalleryImageDTO::fromArray($data['data'] ?? []);
 
         } catch (GuzzleException $e) {
+            if ($e->getCode() === 404) {
+                abort(404);
+            }
             throw new Exception('Error fetching image: '.$e->getMessage());
         }
     }
